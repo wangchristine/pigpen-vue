@@ -17,16 +17,16 @@ export default defineConfig({
         enabled: true,
       },
       manifest: {
-        name: "My PWA Project",
-        short_name: "PWA",
-        theme_color: "#ffffff",
-        display: 'standalone',
+        name: "pigpen-vue",
+        short_name: "Pigpen",
+        theme_color: "#212121",
+        display: "standalone",
         icons: [
           {
             src: "icon-192x192.png",
             sizes: "192x192",
             type: "image/png",
-            purpose: "any maskable",
+            purpose: "any",
           },
           {
             src: "icon-512x512.png",
