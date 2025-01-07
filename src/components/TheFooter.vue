@@ -1,5 +1,6 @@
 <script setup>
 import router from "@/router";
+import menu from "@/config/menu";
 
 const navigateRoute = (routeName) => {
   router.push({ name: routeName });
@@ -9,17 +10,9 @@ const navigateRoute = (routeName) => {
 <template>
   <v-layout class="overflow-visible" style="height: 56px">
     <v-bottom-navigation color="dark" grow>
-      <v-btn @click="navigateRoute('Home')">
-        <v-icon>mdi-heart</v-icon>
-        Home
-      </v-btn>
-      <v-btn @click="navigateRoute('Lottery')">
-        <v-icon>mdi-gift</v-icon>
-        Lottery
-      </v-btn>
-      <v-btn @click="navigateRoute('About')">
-        <v-icon>mdi-pig-variant</v-icon>
-        About(TBC...)
+      <v-btn v-for="(item, idx) in menu" :key="idx" @click="navigateRoute(item.routeName)">
+        <v-icon>{{ item.icon }}</v-icon>
+        {{ item.name }}
       </v-btn>
     </v-bottom-navigation>
   </v-layout>
