@@ -20,7 +20,13 @@
       </v-col>
     </v-row>
   </v-container>
-  <v-fab class="me-4 add-lottery" icon="mdi-plus" location="bottom end" absolute offset></v-fab>
+  <v-fab class="me-4 add-lottery" icon="mdi-plus" color="primary" location="bottom end" offset></v-fab>
 </template>
 
-<style scoped></style>
+<style scoped>
+.add-lottery {
+  position: fixed;
+  bottom: 120px;
+  right: 80px;
+}
+</style>
