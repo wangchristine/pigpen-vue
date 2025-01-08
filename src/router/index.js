@@ -1,8 +1,9 @@
 import { createWebHistory, createRouter } from "vue-router";
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
-import LotteryView from "@/views/LotteryView.vue";
 import AboutView from "@/views/AboutView.vue";
 import HomeView from "@/views/HomeView.vue";
+import LotteryIndex from "@/views/Lottery/index.vue";
+import LotteryCreate from "@/views/Lottery/Create.vue";
 
 const routes = [
   {
@@ -15,12 +16,22 @@ const routes = [
         component: HomeView,
       },
       {
-        path: "lottery",
-        name: "Lottery",
-        component: LotteryView,
+        path: "/lottery",
+        children: [
+          {
+            path: "",
+            name: "Lottery",
+            component: LotteryIndex,
+          },
+          {
+            path: "create",
+            name: "LotteryCreate",
+            component: LotteryCreate,
+          },
+        ],
       },
       {
-        path: "about",
+        path: "/about",
         name: "About",
         component: AboutView,
       },

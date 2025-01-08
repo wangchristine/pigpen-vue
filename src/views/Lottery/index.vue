@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import router from '@/router';
+
+</script>
+
 <template>
   <v-container class="py-8 px-6" fluid>
     <v-row>
@@ -20,7 +25,7 @@
       </v-col>
     </v-row>
   </v-container>
-  <v-fab class="me-4 add-lottery" icon="mdi-plus" color="primary" location="bottom end" offset></v-fab>
+  <v-fab class="me-4 add-lottery" icon="mdi-plus" color="primary" location="bottom end" offset @click="router.push({name: 'LotteryCreate'})"></v-fab>
 </template>
 
 <style scoped>

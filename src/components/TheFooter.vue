@@ -9,7 +9,7 @@ const navigateRoute = (routeName) => {
 
 <template>
   <v-layout class="d-lg-none" style="height: 56px">
-    <v-bottom-navigation grow>
+    <v-bottom-navigation class="position-fixed" grow>
       <v-btn v-for="(item, idx) in menu" :key="idx" @click="navigateRoute(item.routeName)">
         <v-icon>{{ item.icon }}</v-icon>
         {{ item.name }}
