@@ -1,5 +1,7 @@
 <script setup>
 import { ref } from "vue";
+import LotteryChat from "@/components/Lottery/LotteryChat.vue";
+import LotteryForm from "@/components/Lottery/LotteryForm.vue";
 
 const tab = ref(null);
 </script>
@@ -17,16 +19,11 @@ const tab = ref(null);
           <v-card-text>
             <v-tabs-window v-model="tab">
               <v-tabs-window-item value="chat">
-                <v-row class="align-center no-wrap">
-                  <v-col class="flex-grow-1">
-                    <v-textarea class="py-2" label="Please Type..." variant="outlined" rows="5"></v-textarea>
-                  </v-col>
-                  <v-col class="flex-shrink-0" cols="auto">
-                    <v-btn color="primary" icon="mdi-send" size="small"></v-btn>
-                  </v-col>
-                </v-row>
+                <LotteryChat />
               </v-tabs-window-item>
-              <v-tabs-window-item value="form"> Form </v-tabs-window-item>
+              <v-tabs-window-item value="form">
+                <LotteryForm />
+              </v-tabs-window-item>
             </v-tabs-window>
           </v-card-text>
         </v-card>

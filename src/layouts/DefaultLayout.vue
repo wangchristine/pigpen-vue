@@ -4,11 +4,13 @@ import TheFooter from "@/components/TheFooter.vue";
 </script>
 
 <template>
-  <!-- if 電腦版顯示 -->
-  <NavigationDrawer />
-  <v-main>
-    <router-view />
-  </v-main>
-  <!-- if 手機版顯示 -->
-  <TheFooter />
+  <v-layout>
+    <!-- if 電腦版顯示 -->
+    <NavigationDrawer />
+    <v-main>
+      <router-view />
+    </v-main>
+    <!-- if 手機版顯示 -->
+    <TheFooter />
+  </v-layout>
 </template>
