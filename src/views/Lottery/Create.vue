@@ -17,14 +17,14 @@ const tab = ref(null);
           </v-tabs>
 
           <v-card-text>
-            <v-tabs-window v-model="tab">
-              <v-tabs-window-item value="chat">
+            <v-carousel v-model="tab" :show-arrows="false" :continuous="false" hide-delimiters>
+              <v-carousel-item value="chat">
                 <LotteryChat />
-              </v-tabs-window-item>
-              <v-tabs-window-item value="form">
+              </v-carousel-item>
+              <v-carousel-item value="form">
                 <LotteryForm />
-              </v-tabs-window-item>
-            </v-tabs-window>
+              </v-carousel-item>
+            </v-carousel>
           </v-card-text>
         </v-card>
       </v-col>
