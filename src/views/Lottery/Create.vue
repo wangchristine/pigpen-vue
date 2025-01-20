@@ -17,7 +17,7 @@ const tab = ref(null);
           </v-tabs>
 
           <v-card-text>
-            <v-carousel v-model="tab" :show-arrows="false" :continuous="false" hide-delimiters>
+            <v-carousel v-model="tab" :show-arrows="false" :continuous="false" hide-delimiters style="height: 100%">
               <v-carousel-item value="chat">
                 <LotteryChat />
               </v-carousel-item>
