@@ -1,40 +1,41 @@
 <script setup>
 import { ref } from "vue";
+import location from "@/config/location";
 
-const valid = ref(false);
+const initData = {
+  title: "",
+  award: "",
+  link: "",
+  description: "",
+  startDate: null,
+  endDate: null,
+  announceDates: [],
+  announceLocations: [],
+};
+
+const formValid = ref(false);
 const fromNow = ref(false);
-
-const formData = ref([
-  {
-    title: "",
-    award: "",
-    link: "",
-    description: "",
-    startDate: null,
-    endDate: null,
-    announceDate: null,
-    announceLocation: [],
-  },
-]);
+const formData = ref([initData]);
 
 const rules = ref({
   required: (value) => {
-    if (value) return true;
+    if (value) {
+      if (Array.isArray(value)) {
+        if (value.length !== 0) {
+          return true;
+        } else {
+          return "Required";
+        }
+      } else {
+        return true;
+      }
+    }
     return "Required";
   },
 });
 
 const addFormItem = () => {
-  formData.value.push({
-    title: "",
-    award: "",
-    link: "",
-    description: "",
-    startDate: null,
-    endDate: null,
-    announceDate: null,
-    announceLocation: [],
-  });
+  formData.value.push(initData);
 };
 
 const removeFormItem = (key) => {
@@ -43,7 +44,7 @@ const removeFormItem = (key) => {
 </script>
 
 <template>
-  <v-form v-model="valid">
+  <v-form v-model="formValid">
     <v-container>
       <template v-for="(item, key) in formData" :key="key">
         <h2>
@@ -78,63 +79,53 @@ const removeFormItem = (key) => {
           </v-col>
         </v-row>
         <v-row dense>
-          <v-col cols="auto" sm="12"> 活動區間: </v-col>
-          <v-col cols="auto" sm="12">
+          <v-col cols="auto" sm="12">活動區間: </v-col>
+          <v-col cols="12" md="2">
             <v-checkbox v-model="fromNow">
               <template v-slot:label>即日起</template>
             </v-checkbox>
           </v-col>
           <v-col cols="12" sm="6" md="4" v-if="!fromNow">
-            <v-menu>
-              <template v-slot:activator="{ props }">
-                <v-text-field
-                  v-model="formData[key].startDate"
-                  label="開始日期"
-                  prepend-inner-icon="mdi-calendar"
-                  readonly
-                  v-bind="props"
-                ></v-text-field>
-              </template>
-              <v-date-picker v-model="formData[key].startDate" show-adjacent-months></v-date-picker>
-            </v-menu>
+            <v-date-input
+              v-model="formData[key].startDate"
+              label="開始日期"
+              prepend-icon=""
+              prepend-inner-icon="$calendar"
+            ></v-date-input>
           </v-col>
           <v-col cols="12" sm="6" md="4">
-            <v-menu>
-              <template v-slot:activator="{ props }">
-                <v-text-field
-                  v-model="formData[key].endDate"
-                  label="結束日期*"
-                  prepend-inner-icon="mdi-calendar"
-                  readonly
-                  v-bind="props"
-                  :rules="[rules.required]"
-                ></v-text-field>
-              </template>
-              <v-date-picker v-model="formData[key].endDate" show-adjacent-months></v-date-picker>
-            </v-menu>
+            <v-date-input
+              v-model="formData[key].endDate"
+              label="結束日期*"
+              prepend-icon=""
+              prepend-inner-icon="$calendar"
+              :rules="[rules.required]"
+            ></v-date-input>
           </v-col>
         </v-row>
         <v-row dense>
           <v-col cols="12" sm="6" md="4">
-            <v-menu>
-              <template v-slot:activator="{ props }">
-                <v-text-field
-                  v-model="formData[key].announceDate"
-                  label="公布日期"
-                  prepend-inner-icon="mdi-calendar"
-                  readonly
-                  v-bind="props"
-                ></v-text-field>
-              </template>
-              <v-date-picker v-model="formData[key].announceDate" show-adjacent-months></v-date-picker>
-            </v-menu>
+            <v-date-input
+              v-model="formData[key].announceDates"
+              label="公布日期*"
+              prepend-icon=""
+              prepend-inner-icon="$calendar"
+              :rules="[rules.required]"
+              multiple
+            ></v-date-input>
+            <ul class="announceDateList">
+              <li v-for="(date, key) in formData[key].announceDates" :key="key" :title="date">
+                {{ date.toLocaleDateString() }}
+              </li>
+            </ul>
           </v-col>
           <v-col cols="12" sm="6" md="8">
             <v-select
-              v-model="formData[key].announceLocation"
-              :items="['a', 'b', 'c']"
-              label="公布地點"
+              v-model="formData[key].announceLocations"
+              :items="location"
+              label="公布地點*"
               multiple
+              :rules="[rules.required]"
             ></v-select>
           </v-col>
         </v-row>
@@ -148,4 +139,9 @@ const removeFormItem = (key) => {
   </v-form>
 </template>
 
-<style scoped></style>
+<style scoped>
+.announceDateList {
+  list-style: none;
+  padding: 0 10px 10px 10px;
+}
+</style>
