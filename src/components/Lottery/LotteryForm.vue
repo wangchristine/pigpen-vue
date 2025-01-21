@@ -12,6 +12,8 @@ const formData = ref([
     description: "",
     startDate: null,
     endDate: null,
+    announceDate: null,
+    announceLocation: [],
   },
 ]);
 
@@ -30,6 +32,8 @@ const addFormItem = () => {
     description: "",
     startDate: null,
     endDate: null,
+    announceDate: null,
+    announceLocation: [],
   });
 };
 
@@ -74,21 +78,19 @@ const removeFormItem = (key) => {
           </v-col>
         </v-row>
         <v-row dense>
-          <v-col cols="auto">
-            活動區間:
-          </v-col>
-          <v-col cols="auto">
+          <v-col cols="auto" sm="12"> 活動區間: </v-col>
+          <v-col cols="auto" sm="12">
             <v-checkbox v-model="fromNow">
               <template v-slot:label>即日起</template>
             </v-checkbox>
           </v-col>
-          <v-col cols="6" md="4" v-if="!fromNow">
+          <v-col cols="12" sm="6" md="4" v-if="!fromNow">
             <v-menu>
               <template v-slot:activator="{ props }">
                 <v-text-field
                   v-model="formData[key].startDate"
                   label="開始日期"
-                  prepend-icon="mdi-calendar"
+                  prepend-inner-icon="mdi-calendar"
                   readonly
                   v-bind="props"
                 ></v-text-field>
@@ -96,13 +98,13 @@ const removeFormItem = (key) => {
               <v-date-picker v-model="formData[key].startDate" show-adjacent-months></v-date-picker>
             </v-menu>
           </v-col>
-          <v-col cols="6" md="4">
+          <v-col cols="12" sm="6" md="4">
             <v-menu>
               <template v-slot:activator="{ props }">
                 <v-text-field
                   v-model="formData[key].endDate"
                   label="結束日期*"
-                  prepend-icon="mdi-calendar"
+                  prepend-inner-icon="mdi-calendar"
                   readonly
                   v-bind="props"
                   :rules="[rules.required]"
@@ -110,6 +112,30 @@ const removeFormItem = (key) => {
               </template>
               <v-date-picker v-model="formData[key].endDate" show-adjacent-months></v-date-picker>
             </v-menu>
+          </v-col>
+        </v-row>
+        <v-row dense>
+          <v-col cols="12" sm="6" md="4">
+            <v-menu>
+              <template v-slot:activator="{ props }">
+                <v-text-field
+                  v-model="formData[key].announceDate"
+                  label="公布日期"
+                  prepend-inner-icon="mdi-calendar"
+                  readonly
+                  v-bind="props"
+                ></v-text-field>
+              </template>
+              <v-date-picker v-model="formData[key].announceDate" show-adjacent-months></v-date-picker>
+            </v-menu>
+          </v-col>
+          <v-col cols="12" sm="6" md="8">
+            <v-select
+              v-model="formData[key].announceLocation"
+              :items="['a', 'b', 'c']"
+              label="公布地點"
+              multiple
+            ></v-select>
           </v-col>
         </v-row>
         <v-divider v-if="key !== formData.length - 1" style="margin: 12px 0"></v-divider>
