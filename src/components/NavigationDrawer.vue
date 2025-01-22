@@ -12,7 +12,7 @@ const navigateRoute = (routeName) => {
 
 <template>
   <v-navigation-drawer v-model="drawer">
-    <v-sheet class="pa-4" color="grey-lighten-4">
+    <v-sheet class="pa-4" color="grey-lighten-2">
       <v-avatar class="mb-4" color="grey-darken-1" size="64"></v-avatar>
       <div>Welcome!</div>
     </v-sheet>
