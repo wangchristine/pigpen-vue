@@ -14,8 +14,8 @@ const initData = {
 };
 
 const formValid = ref(false);
-const fromNow = ref(false);
-const formData = ref([initData]);
+const fromNow = ref([false]);
+const formData = ref([{ ...initData }]);
 
 const rules = ref({
   required: (value) => {
@@ -35,11 +35,13 @@ const rules = ref({
 });
 
 const addFormItem = () => {
-  formData.value.push(initData);
+  formData.value.push({ ...initData });
+  fromNow.value.push(false);
 };
 
 const removeFormItem = (key) => {
   formData.value.splice(key, 1);
+  fromNow.value.splice(key, 1);
 };
 </script>
 
@@ -81,11 +83,11 @@ const removeFormItem = (key) => {
         <v-row dense>
           <v-col cols="auto" sm="12">活動區間: </v-col>
           <v-col cols="12" md="2">
-            <v-checkbox v-model="fromNow">
+            <v-checkbox v-model="fromNow[key]">
               <template v-slot:label>即日起</template>
             </v-checkbox>
           </v-col>
-          <v-col cols="12" sm="6" md="4" v-if="!fromNow">
+          <v-col cols="12" sm="6" md="4" v-if="!fromNow[key]">
             <v-date-input
               v-model="formData[key].startDate"
               label="開始日期"
@@ -114,8 +116,8 @@ const removeFormItem = (key) => {
               multiple
             ></v-date-input>
             <ul class="announceDateList">
-              <li v-for="(date, key) in formData[key].announceDates" :key="key" :title="date">
-                {{ date.toLocaleDateString() }}
+              <li v-for="date in formData[key].announceDates" :key="date" :title="date">
+                - {{ date.toLocaleDateString() }}
               </li>
             </ul>
           </v-col>
@@ -143,5 +145,6 @@ const removeFormItem = (key) => {
 .announceDateList {
   list-style: none;
   padding: 0 10px 10px 10px;
+  font-size: 16px;
 }
 </style>
