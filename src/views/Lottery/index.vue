@@ -8,7 +8,7 @@ import router from "@/router";
       <v-col cols="12">
         <v-card>
           <v-list>
-            <v-list-subheader title="List"></v-list-subheader>
+            <v-list-subheader title="進行中"></v-list-subheader>
             <template v-for="n in 2" :key="n">
               <v-list-item lines="three">
                 <template v-slot:prepend>
@@ -29,24 +29,27 @@ import router from "@/router";
       </v-col>
       <v-col cols="12">
         <v-card>
-          <v-list>
-            <v-list-subheader title="History"></v-list-subheader>
-            <template v-for="n in 2" :key="n">
-              <v-list-item lines="three">
-                <template v-slot:prepend>
-                  <v-avatar color="grey-darken-3">未中</v-avatar>
-                  <v-avatar color="grey-darken-3">過期</v-avatar>
+          <v-expansion-panels>
+            <v-expansion-panel title="歷史紀錄">
+              <template v-slot:text>
+                <template v-for="n in 2" :key="n">
+                  <v-list-item lines="three">
+                    <template v-slot:prepend>
+                      <v-avatar color="grey-darken-3">未中</v-avatar>
+                      <v-avatar color="grey-lighten-4">中獎</v-avatar>
+                    </template>
+                    <template v-slot:title>The title</template>
+                    <template v-slot:subtitle>
+                      2025-01-01 ~ 2025-01-31 | The award...(cut)
+                      <br />
+                      公布日期: 2025-01-31
+                    </template>
+                  </v-list-item>
+                  <v-divider v-if="n !== 2" :key="`divider-${n}`" inset></v-divider>
                 </template>
-                <template v-slot:title>The title</template>
-                <template v-slot:subtitle>
-                  2025-01-01 ~ 2025-01-31 | The award...(cut)
-                  <br />
-                  公布日期: 2025-01-31
-                </template>
-              </v-list-item>
-              <v-divider v-if="n !== 2" :key="`divider-${n}`" inset></v-divider>
-            </template>
-          </v-list>
+              </template>
+            </v-expansion-panel>
+          </v-expansion-panels>
         </v-card>
       </v-col>
     </v-row>
