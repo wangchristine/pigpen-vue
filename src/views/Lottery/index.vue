@@ -3,6 +3,12 @@ import router from "@/router";
 </script>
 
 <template>
+  <v-app-bar>
+    <v-app-bar-title>Lottery</v-app-bar-title>
+    <template v-slot:append>
+      <v-btn prepend-icon="mdi-plus" @click="router.push({ name: 'LotteryCreate' })">Add</v-btn>
+    </template>
+  </v-app-bar>
   <v-container class="py-8 px-6" fluid>
     <v-row>
       <v-col cols="12">
@@ -54,14 +60,6 @@ import router from "@/router";
       </v-col>
     </v-row>
   </v-container>
-  <v-fab
-    class="me-4 add-lottery"
-    icon="mdi-plus"
-    color="primary"
-    location="bottom end"
-    offset
-    @click="router.push({ name: 'LotteryCreate' })"
-  ></v-fab>
 </template>
 
 <style scoped>

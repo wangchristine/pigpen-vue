@@ -7,6 +7,9 @@ const tab = ref(null);
 </script>
 
 <template>
+  <v-app-bar>
+    <v-app-bar-title>Lottery Create</v-app-bar-title>
+  </v-app-bar>
   <v-container class="py-8 px-6" fluid>
     <v-row>
       <v-col cols="12">
