@@ -50,10 +50,17 @@ const removeFormItem = (key) => {
     <template v-for="(item, key) in formData" :key="key">
       <h2>
         task {{ key + 1 }}
-        <v-btn v-if="formData.length > 1" size="small" @click="removeFormItem(key)">
+        <v-btn
+          v-if="formData.length > 1"
+          size="small"
+          variant="tonal"
+          color="deep-purple-lighten-3"
+          @click="removeFormItem(key)"
+        >
           <v-icon>mdi-minus</v-icon>
         </v-btn>
       </h2>
+      <br />
       <v-row dense>
         <v-col cols="12" md="8">
           <v-text-field v-model="formData[key].title" :rules="[rules.required]" label="Title*"></v-text-field>
@@ -91,7 +98,13 @@ const removeFormItem = (key) => {
       </v-row>
       <v-row dense>
         <v-col cols="12" md="8">
-          <v-textarea v-model="formData[key].award" :rules="[rules.required]" rows="3" label="Award*"></v-textarea>
+          <v-textarea
+            v-model="formData[key].award"
+            :rules="[rules.required]"
+            rows="3"
+            label="Award*"
+            no-resize
+          ></v-textarea>
         </v-col>
       </v-row>
       <v-row dense>
@@ -101,6 +114,7 @@ const removeFormItem = (key) => {
             :rules="[rules.required]"
             rows="5"
             label="Description*"
+            no-resize
           ></v-textarea>
         </v-col>
       </v-row>
@@ -132,13 +146,13 @@ const removeFormItem = (key) => {
       </v-row>
       <v-divider v-if="key !== formData.length - 1" style="margin: 12px 0"></v-divider>
     </template>
-    <hr />
-    <v-btn @click="addFormItem">
+    <hr color="#b39ddb" />
+    <v-btn variant="tonal" color="deep-purple-lighten-3" @click="addFormItem">
       <v-icon>mdi-plus</v-icon>
     </v-btn>
     <v-row>
       <v-col cols="12">
-        <v-btn class="float-right">Save</v-btn>
+        <v-btn class="float-right" variant="tonal" color="deep-purple-lighten-3">Save</v-btn>
       </v-col>
     </v-row>
   </v-form>

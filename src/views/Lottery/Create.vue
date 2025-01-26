@@ -14,7 +14,7 @@ const tab = ref(null);
     <v-row>
       <v-col cols="12">
         <v-card>
-          <v-tabs v-model="tab" align-tabs="center" color="primary" grow>
+          <v-tabs v-model="tab" align-tabs="center" color="deep-purple-lighten-3" grow>
             <v-tab value="chat">Chat</v-tab>
             <v-tab value="form">Form</v-tab>
           </v-tabs>

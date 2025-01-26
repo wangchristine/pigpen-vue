@@ -6,7 +6,14 @@ import router from "@/router";
   <v-app-bar>
     <v-app-bar-title>Lottery</v-app-bar-title>
     <template v-slot:append>
-      <v-btn prepend-icon="mdi-plus" @click="router.push({ name: 'LotteryCreate' })">Add</v-btn>
+      <v-btn
+        prepend-icon="mdi-plus"
+        variant="tonal"
+        color="deep-purple-lighten-3"
+        @click="router.push({ name: 'LotteryCreate' })"
+      >
+        Add
+      </v-btn>
     </template>
   </v-app-bar>
   <v-container class="py-8 px-6" fluid>
@@ -18,8 +25,8 @@ import router from "@/router";
             <template v-for="n in 2" :key="n">
               <v-list-item lines="three">
                 <template v-slot:prepend>
-                  <v-avatar color="grey-darken-1">尚未</v-avatar>
-                  <v-avatar color="grey-lighten-2">開獎</v-avatar>
+                  <v-avatar color="deep-purple-lighten-3">尚未</v-avatar>
+                  <v-avatar color="deep-purple-lighten-1">開獎</v-avatar>
                 </template>
                 <template v-slot:title>The title</template>
                 <template v-slot:subtitle>
@@ -42,7 +49,7 @@ import router from "@/router";
                   <v-list-item lines="three">
                     <template v-slot:prepend>
                       <v-avatar color="grey-darken-3">未中</v-avatar>
-                      <v-avatar color="grey-lighten-4">中獎</v-avatar>
+                      <v-avatar color="deep-purple-darken-2">中獎</v-avatar>
                     </template>
                     <template v-slot:title>The title</template>
                     <template v-slot:subtitle>
