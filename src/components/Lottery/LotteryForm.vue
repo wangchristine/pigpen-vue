@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { useLotteryStore } from "@/store/lottery";
 import location from "@/config/location";
 
 const initData = {
@@ -13,6 +14,7 @@ const initData = {
   announceLocations: [],
 };
 
+const lotteryStore = useLotteryStore();
 const formValid = ref(false);
 const fromNow = ref([false]);
 const formData = ref([{ ...initData }]);
@@ -43,10 +45,31 @@ const removeFormItem = (key) => {
   formData.value.splice(key, 1);
   fromNow.value.splice(key, 1);
 };
+
+watch(
+  fromNow,
+  (data) => {
+    data.forEach((isFromNow, key) => {
+      if (isFromNow) {
+        const now = new Date();
+        formData.value[key].startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      }
+    });
+  },
+  { deep: true },
+);
+
+const addLottery = () => {
+  if (formValid.value) {
+    console.log(formData.value);
+
+    lotteryStore.addLottery(formData.value);
+  }
+};
 </script>
 
 <template>
-  <v-form v-model="formValid">
+  <v-form v-model="formValid" @submit.prevent="addLottery">
     <template v-for="(item, key) in formData" :key="key">
       <h2>
         task {{ key + 1 }}
@@ -81,9 +104,10 @@ const removeFormItem = (key) => {
         <v-col cols="12" sm="6" md="4" v-if="!fromNow[key]">
           <v-date-input
             v-model="formData[key].startDate"
-            label="開始日期"
+            label="開始日期*"
             prepend-icon=""
             prepend-inner-icon="$calendar"
+            :rules="[rules.required]"
           ></v-date-input>
         </v-col>
         <v-col cols="12" sm="6" md="4">
@@ -152,7 +176,7 @@ const removeFormItem = (key) => {
     </v-btn>
     <v-row>
       <v-col cols="12">
-        <v-btn class="float-right" variant="tonal" color="deep-purple-lighten-3">Save</v-btn>
+        <v-btn type="submit" class="float-right" variant="tonal" color="deep-purple-lighten-3">Save</v-btn>
       </v-col>
     </v-row>
   </v-form>
