@@ -8,8 +8,6 @@ export const useLotteryStore = defineStore("lottery", () => {
     data.forEach((lottery) => {
       lottery.status = [];
       lottery.announceDates.forEach(() => {
-export const useLotteryStore = defineStore("lottery", {
-  //
         lottery.status.push(0);
       });
       lottery.createdAt = new Date();
