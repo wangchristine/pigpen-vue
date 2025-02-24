@@ -4,6 +4,7 @@ import AboutView from "@/views/AboutView.vue";
 import HomeView from "@/views/HomeView.vue";
 import LotteryIndex from "@/views/Lottery/index.vue";
 import LotteryCreate from "@/views/Lottery/Create.vue";
+import LoginView from "@/views/LoginView.vue";
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
         component: AboutView,
       },
     ],
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: LoginView,
   },
 ];
 
