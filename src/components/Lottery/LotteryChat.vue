@@ -16,37 +16,50 @@ const sendMessage = () => {
 </script>
 
 <template>
-  <div class="chat-block">
-    <v-row v-for="(message, index) in messages" :key="index" justify="center">
-      <v-col cols="12" :class="message.isMe ? 'text-right' : 'text-left'">
-        <v-card :class="message.isMe ? 'my-message' : 'ai-message'" class="d-inline-block">
-          <v-card-text>
-            {{ message.text }}
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </div>
-  <v-row class="align-center no-wrap">
-    <v-col class="flex-grow-1">
+  <div class="chat-container">
+    <div class="chat-block">
+      <v-row v-for="(message, index) in messages" :key="index" justify="center">
+        <v-col cols="12" :class="message.isMe ? 'text-right' : 'text-left'">
+          <v-card :class="message.isMe ? 'my-message' : 'ai-message'" class="d-inline-block">
+            <v-card-text class="message">
+              {{ message.text }}
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </div>
+    <div class="input-block">
       <v-textarea
         v-model="currentMessage"
-        class="py-2"
+        class=""
         label="Please Type..."
-        variant="outlined"
-        rows="5"
+        variant="solo"
+        rows="3"
+        max-rows="5"
         no-resize
-        clearable
       ></v-textarea>
-    </v-col>
-    <v-col class="flex-shrink-0" cols="auto">
       <v-btn color="deep-purple-lighten-3" icon="mdi-send" size="small" @click="sendMessage"></v-btn>
-    </v-col>
-  </v-row>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-.my-message {
+.chat-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.chat-block {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+  width: 100%;
+  max-width: 768px;
+  height: calc(100vh - 245px);
+}
+
+.chat-block .my-message {
   background-color: #b39ddb;
   color: white;
   border-radius: 24px;
@@ -54,19 +67,26 @@ const sendMessage = () => {
   text-align: left;
 }
 
-.ai-message {
+.chat-block .ai-message {
   max-width: 100%;
   text-align: left;
 }
 
-.chat-block {
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 10px;
+.chat-block .message {
+  padding: 10px 20px;
 }
 
-.v-card-text {
-  padding: 10px 20px;
+.input-block {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 768px;
+  border-radius: 10px;
+  padding: 0 5px;
+
+  /* 暫時 */
+  border: solid 0.5px;
 }
 </style>

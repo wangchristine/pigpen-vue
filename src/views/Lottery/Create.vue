@@ -7,12 +7,12 @@ const tab = ref(null);
 </script>
 
 <template>
-  <v-app-bar>
+  <v-app-bar :height="56">
     <v-app-bar-title>Lottery Create</v-app-bar-title>
   </v-app-bar>
-  <v-container class="py-8 px-6" fluid>
+  <v-container class="py-0 px-0" fluid>
     <v-card>
-      <v-tabs v-model="tab" align-tabs="center" color="deep-purple-lighten-3" grow>
+      <v-tabs v-model="tab" align-tabs="center" color="deep-purple-lighten-3" fixed-tabs>
         <v-tab value="chat">Chat</v-tab>
         <v-tab value="form">Form</v-tab>
       </v-tabs>
