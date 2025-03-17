@@ -31,7 +31,6 @@ const sendMessage = () => {
     <div class="input-block">
       <v-textarea
         v-model="currentMessage"
-        class=""
         label="Please Type..."
         variant="solo"
         rows="3"
@@ -45,9 +44,8 @@ const sendMessage = () => {
 
 <style scoped>
 .chat-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+  max-width: 768px;
+  margin: 0 auto;
 }
 
 .chat-block {
@@ -55,8 +53,7 @@ const sendMessage = () => {
   overflow-x: hidden;
   padding: 10px;
   width: 100%;
-  max-width: 768px;
-  height: calc(100vh - 245px);
+  height: calc(100vh - 250px);
 }
 
 .chat-block .my-message {
@@ -85,8 +82,28 @@ const sendMessage = () => {
   max-width: 768px;
   border-radius: 10px;
   padding: 0 5px;
+  margin-bottom: 5px;
+  background-color: #303030;
+  z-index: 1;
 
   /* 暫時 */
   border: solid 0.5px;
+}
+
+::v-deep(.input-block .v-field) {
+  background-color: #303030 !important;
+}
+
+@media (max-width: 1280px) {
+  .chat-block {
+    height: calc(100vh - 245px - 56px);
+  }
+  .input-block {
+    margin-bottom: 0;
+    bottom: 56px;
+
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
 </style>
