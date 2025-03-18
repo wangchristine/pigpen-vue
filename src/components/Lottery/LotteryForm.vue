@@ -2,6 +2,7 @@
 import { ref, watch } from "vue";
 import { useLotteryStore } from "@/store/lottery";
 import location from "@/config/location";
+import rules from "@/utils/formRule";
 
 const initData = {
   title: "",
@@ -18,23 +19,6 @@ const lotteryStore = useLotteryStore();
 const formValid = ref(false);
 const fromNow = ref([false]);
 const formData = ref([{ ...initData }]);
-
-const rules = ref({
-  required: (value) => {
-    if (value) {
-      if (Array.isArray(value)) {
-        if (value.length !== 0) {
-          return true;
-        } else {
-          return "Required";
-        }
-      } else {
-        return true;
-      }
-    }
-    return "Required";
-  },
-});
 
 const addFormItem = () => {
   formData.value.push({ ...initData });
