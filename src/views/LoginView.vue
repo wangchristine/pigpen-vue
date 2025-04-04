@@ -1,29 +1,38 @@
 <script setup>
-import SnackBar from "@/components/SnackBar.vue";
 import { ref } from "vue";
 import { useCommonStore } from "@/store/common";
 import rules from "@/utils/formRule";
+import router from "@/router";
+import { storeToRefs } from "pinia";
 
 const visible = ref(false);
-
 const initData = {
   password: "",
 };
 const commonStore = useCommonStore();
+const { isProgressLoading, showSnack, snackType, snackText } = storeToRefs(commonStore);
 const formValid = ref(false);
 const formData = ref({ ...initData });
 
-const login = () => {
-  if (formValid.value) {
-    console.log(formData.value);
-
-    console.log(commonStore.login(formData.value));
+const login = async () => {
+  if (!formValid.value) {
+    return;
   }
+
+  try {
+    isProgressLoading.value = true;
+    await commonStore.login(formData.value);
+    router.push({ name: "Home" });
+  } catch (err) {
+    showSnack.value = true;
+    snackType.value = "error";
+    snackText.value = err.response.data.message;
+  }
+  isProgressLoading.value = false;
 };
 </script>
 
 <template>
-  <SnackBar :show="true" text="你已登出" />
   <v-container class="py-8 px-6" fluid>
     <v-form v-model="formValid" @submit.prevent="login">
       <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">

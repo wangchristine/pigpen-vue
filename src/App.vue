@@ -1,7 +1,12 @@
-<script setup></script>
+<script setup>
+import ProgressLoading from "@/components/ProgressLoading.vue";
+import SnackBar from "@/components/SnackBar.vue";
+</script>
 
 <template>
   <v-app>
+    <ProgressLoading />
+    <SnackBar />
     <router-view />
   </v-app>
 </template>

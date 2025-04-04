@@ -1,26 +1,39 @@
 <script setup>
 import { ref } from "vue";
+import { useCommonStore } from "@/store/common";
+import { storeToRefs } from "pinia";
 
 const props = defineProps({
-  show: {
-    type: Boolean,
-    default: false,
-  },
-  text: {
-    type: String,
-  },
   timeout: {
     type: Number,
     default: 4000,
   },
 });
-const snackbar = ref(props.show);
+
+const commonStore = useCommonStore();
+const { showSnack, snackType, snackText } = storeToRefs(commonStore);
+
+const colors = ref({
+  info: "deep-purple-lighten-4",
+  success: "green-lighten-2",
+  error: "red-lighten-2",
+});
+
+const toggleSnack = () => {
+  showSnack.value = !showSnack.value;
+};
 </script>
 
 <template>
   <div class="text-center">
-    <v-snackbar v-model="snackbar" :timeout="timeout" location="top" color="deep-purple-lighten-4">
-      {{ text }}
+    <v-snackbar
+      :model-value="showSnack"
+      :timeout="props.timeout"
+      location="top"
+      :color="colors[snackType]"
+      @update:model-value="() => toggleSnack()"
+    >
+      {{ snackText }}
     </v-snackbar>
   </div>
 </template>
