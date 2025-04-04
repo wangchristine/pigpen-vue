@@ -31,11 +31,13 @@ jobs:
       # Runs a single command using the runners shell
       - name: NPM Install
         run: |
-          npm install
+          npm ci
 
       - name: Build
         run: |
           npm run build
+        env:
+          VITE_APP_URL: ${{ secrets.VITE_APP_URL }}
 
       - name: Set SPA route
         run: |
