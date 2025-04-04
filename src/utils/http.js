@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const client = axios.create({
-  baseURL: import.meta.env.VITE_APP_URL + "api",
+  baseURL: import.meta.env.VITE_APP_URL + "/api",
   // headers: {
   // temp token
   // 'Authorization': "Bearer xxx"
