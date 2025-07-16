@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from "vue";
-import { useLotteryStore } from "@/store/lottery";
 import location from "@/config/location";
+import { useLotteryStore } from "@/store/lottery";
 import rules from "@/utils/formRule";
 
 const initData = {
@@ -82,7 +82,7 @@ const addLottery = () => {
         <v-col cols="auto" sm="12">活動區間: </v-col>
         <v-col cols="12" md="2">
           <v-checkbox v-model="fromNow[key]">
-            <template v-slot:label>即日起</template>
+            <template #label>即日起</template>
           </v-checkbox>
         </v-col>
         <v-col cols="12" sm="6" md="4" v-if="!fromNow[key]">

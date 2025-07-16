@@ -1,7 +1,7 @@
-import { defineStore } from "pinia";
-import { apiPostLogin } from "@/apis";
 import Cookies from "js-cookie";
+import { defineStore } from "pinia";
 import { ref, watch } from "vue";
+import { apiPostLogin } from "@/apis";
 
 export const useCommonStore = defineStore("common", () => {
   const isLogin = ref(false);

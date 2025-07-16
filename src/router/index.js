@@ -1,13 +1,13 @@
-import { createWebHistory, createRouter } from "vue-router";
-import DefaultLayout from "@/layouts/DefaultLayout.vue";
-import AboutView from "@/views/AboutView.vue";
-import HomeView from "@/views/HomeView.vue";
-import LotteryIndex from "@/views/Lottery/index.vue";
-import LotteryCreate from "@/views/Lottery/Create.vue";
-import LoginView from "@/views/LoginView.vue";
 import Cookies from "js-cookie";
 import { storeToRefs } from "pinia";
+import { createWebHistory, createRouter } from "vue-router";
+import DefaultLayout from "@/layouts/DefaultLayout.vue";
 import { useCommonStore } from "@/store/common";
+import AboutView from "@/views/AboutView.vue";
+import HomeView from "@/views/HomeView.vue";
+import LoginView from "@/views/LoginView.vue";
+import LotteryCreate from "@/views/Lottery/LotteryCreate.vue";
+import LotteryIndex from "@/views/Lottery/LotteryIndex.vue";
 
 const routes = [
   {

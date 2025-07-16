@@ -1,9 +1,9 @@
 <script setup>
+import { storeToRefs } from "pinia";
 import { ref } from "vue";
+import router from "@/router";
 import { useCommonStore } from "@/store/common";
 import rules from "@/utils/formRule";
-import router from "@/router";
-import { storeToRefs } from "pinia";
 
 const visible = ref(false);
 const initData = {

@@ -1,7 +1,7 @@
 <script setup>
+import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { useCommonStore } from "@/store/common";
-import { storeToRefs } from "pinia";
 
 const props = defineProps({
   timeout: {

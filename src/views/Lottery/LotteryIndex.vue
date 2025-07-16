@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import router from "@/router";
-import { useLotteryStore } from "@/store/lottery";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
+import router from "@/router";
+import { useLotteryStore } from "@/store/lottery";
 
 const lotteryStore = useLotteryStore();
 const { lotteryList } = storeToRefs(lotteryStore);
@@ -31,7 +31,7 @@ for (let i = 0; i < lotteryList.value.length; i++) {
 <template>
   <v-app-bar>
     <v-app-bar-title>Lottery</v-app-bar-title>
-    <template v-slot:append>
+    <template #append>
       <v-btn
         prepend-icon="mdi-plus"
         variant="tonal"
@@ -50,7 +50,7 @@ for (let i = 0; i < lotteryList.value.length; i++) {
             <v-list-subheader title="進行中"></v-list-subheader>
             <template v-for="(lottery, key1) in inProcessLottery" :key="key1">
               <v-list-item lines="three">
-                <template v-slot:prepend>
+                <template #prepend>
                   <template v-for="(status, key2) in lottery.status" :key="key2">
                     <template v-if="status == 0">
                       <v-avatar v-if="new Date() < lottery.announceDates[key2]" color="deep-purple-lighten-3">
@@ -64,8 +64,8 @@ for (let i = 0; i < lotteryList.value.length; i++) {
                     </template>
                   </template>
                 </template>
-                <template v-slot:title>{{ lottery.title }}</template>
-                <template v-slot:subtitle>
+                <template #title>{{ lottery.title }}</template>
+                <template #subtitle>
                   {{ lottery.startDate.toLocaleDateString() }} ~ {{ lottery.endDate.toLocaleDateString() }} |
                   {{ lottery.award.slice(0, 100) }}
                   {{ lottery.award.length > 100 ? "......" : "" }}
@@ -86,17 +86,17 @@ for (let i = 0; i < lotteryList.value.length; i++) {
         <v-card>
           <v-expansion-panels>
             <v-expansion-panel title="歷史紀錄">
-              <template v-slot:text>
+              <template #text>
                 <template v-for="(lottery, key1) in historyLottery" :key="key1">
                   <v-list-item lines="three">
-                    <template v-slot:prepend>
+                    <template #prepend>
                       <template v-for="(status, key2) in lottery.status" :key="key2">
                         <v-avatar v-if="status == 1" color="deep-purple-darken-2">中獎</v-avatar>
                         <v-avatar v-if="status == 2" color="grey-darken-3">未中</v-avatar>
                       </template>
                     </template>
-                    <template v-slot:title>{{ lottery.title }}</template>
-                    <template v-slot:subtitle>
+                    <template #title>{{ lottery.title }}</template>
+                    <template #subtitle>
                       {{ lottery.startDate.toLocaleDateString() }} ~ {{ lottery.endDate.toLocaleDateString() }} |
                       {{ lottery.award.slice(0, 100) }}
                       {{ lottery.award.length > 100 ? "......" : "" }}

@@ -1,6 +1,1 @@
-export default [
-  'Facebook',
-  'Email',
-  '電話',
-  '簡訊',
-];
+export default ["Facebook", "Email", "電話", "簡訊"];

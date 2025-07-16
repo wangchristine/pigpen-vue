@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
-import router from "@/router";
 import menu from "@/config/menu";
+import router from "@/router";
 
 const drawer = ref(null);
 

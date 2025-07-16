@@ -1,6 +1,6 @@
 <script setup>
-import router from "@/router";
 import menu from "@/config/menu";
+import router from "@/router";
 
 const navigateRoute = (routeName) => {
   router.push({ name: routeName });

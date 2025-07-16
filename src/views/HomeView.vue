@@ -20,7 +20,7 @@ const cards = ref(["Today", "Yesterday"]);
 
             <template v-for="n in 2" :key="n">
               <v-list-item title="Lorem ipsum" :subtitle="`Bello ${n}`">
-                <template v-slot:prepend>
+                <template #prepend>
                   <v-avatar color="grey-darken-1"></v-avatar>
                 </template>
               </v-list-item>
