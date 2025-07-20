@@ -10,8 +10,8 @@ const tab = ref(null);
   <v-app-bar :height="56">
     <v-app-bar-title>Lottery Create</v-app-bar-title>
   </v-app-bar>
-  <v-container class="py-0 px-0" fluid>
-    <v-card>
+  <v-container class="py-0 px-0" height="100%" fluid>
+    <v-card height="100%">
       <v-tabs v-model="tab" align-tabs="center" color="deep-purple-lighten-3" fixed-tabs>
         <v-tab value="chat">Chat</v-tab>
         <v-tab value="form">Form</v-tab>

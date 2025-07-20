@@ -1,6 +1,7 @@
 <script setup>
-import { ref } from "vue";
+import { ref, nextTick } from "vue";
 
+const chatBlockRef = ref(null);
 const currentMessage = ref("");
 const messages = ref([
   { text: "test1", isMe: true },
@@ -11,16 +12,22 @@ const sendMessage = () => {
   if (currentMessage.value) {
     messages.value.push({ text: currentMessage.value, isMe: true });
     currentMessage.value = "";
+
+    nextTick(() => {
+      if (chatBlockRef.value) {
+        chatBlockRef.value.scrollTop = chatBlockRef.value.scrollHeight;
+      }
+    });
   }
 };
 </script>
 
 <template>
   <div class="chat-container">
-    <div class="chat-block">
+    <div ref="chatBlockRef" class="chat-block">
       <v-row v-for="(message, index) in messages" :key="index" justify="center">
         <v-col cols="12" :class="message.isMe ? 'text-right' : 'text-left'">
-          <v-card :class="message.isMe ? 'my-message' : 'ai-message'" class="d-inline-block">
+          <v-card :class="message.isMe ? 'my-message' : 'ai-message'" class="d-inline-block" variant="text">
             <v-card-text class="message">
               {{ message.text }}
             </v-card-text>
@@ -29,14 +36,7 @@ const sendMessage = () => {
       </v-row>
     </div>
     <div class="input-block">
-      <v-textarea
-        v-model="currentMessage"
-        label="Please Type..."
-        variant="solo"
-        rows="3"
-        max-rows="5"
-        no-resize
-      ></v-textarea>
+      <v-textarea v-model="currentMessage" class="px-2" variant="plain" rows="3" max-rows="5" no-resize></v-textarea>
       <v-btn color="deep-purple-lighten-3" icon="mdi-send" size="small" @click="sendMessage"></v-btn>
     </div>
   </div>
@@ -44,7 +44,7 @@ const sendMessage = () => {
 
 <style scoped>
 .chat-container {
-  max-width: 768px;
+  max-width: 850px;
   margin: 0 auto;
 }
 
@@ -57,7 +57,7 @@ const sendMessage = () => {
 }
 
 .chat-block .my-message {
-  background-color: #b39ddb;
+  background-color: #303030;
   color: white;
   border-radius: 24px;
   max-width: 60%;
@@ -70,7 +70,9 @@ const sendMessage = () => {
 }
 
 .chat-block .message {
-  padding: 10px 20px;
+  padding: 8px 16px;
+  font-size: 16px;
+  white-space: pre-wrap;
 }
 
 .input-block {
@@ -79,9 +81,9 @@ const sendMessage = () => {
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: 768px;
+  max-width: 850px;
   border-radius: 10px;
-  padding: 0 5px;
+  padding: 0 6px;
   margin-bottom: 5px;
   background-color: #303030;
   z-index: 1;
@@ -101,9 +103,9 @@ const sendMessage = () => {
   .input-block {
     margin-bottom: 0;
     bottom: 56px;
-
     left: 50%;
     transform: translateX(-50%);
+    width: calc(100% - 10px);
   }
 }
 </style>

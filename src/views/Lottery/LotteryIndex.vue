@@ -36,6 +36,7 @@ for (let i = 0; i < lotteryList.value.length; i++) {
         prepend-icon="mdi-plus"
         variant="tonal"
         color="deep-purple-lighten-3"
+        class="mr-2"
         @click="router.push({ name: 'LotteryCreate' })"
       >
         Add

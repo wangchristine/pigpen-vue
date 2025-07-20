@@ -26,33 +26,35 @@ const login = async () => {
   } catch (err) {
     showSnack.value = true;
     snackType.value = "error";
-    snackText.value = err.response.data.message;
+    snackText.value = err.response?.data.message ?? "出錯啦! 請稍後再試";
   }
   isProgressLoading.value = false;
 };
 </script>
 
 <template>
-  <v-container class="py-8 px-6" fluid>
-    <v-form v-model="formValid" @submit.prevent="login">
-      <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
-        <v-card-title class="text-h5">Login</v-card-title>
-
-        <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">Password</div>
-        <v-text-field
-          v-model="formData.password"
-          :rules="[rules.required]"
-          :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-          :type="visible ? 'text' : 'password'"
-          density="compact"
-          placeholder="Enter your password"
-          prepend-inner-icon="mdi-lock-outline"
-          variant="outlined"
-          @click:append-inner="visible = !visible"
-        ></v-text-field>
-
-        <v-btn type="submit" class="mb-8" color="deep-purple-lighten-3" size="large" variant="tonal" block>Login</v-btn>
+  <v-layout class="h-screen">
+    <v-form v-model="formValid" @submit.prevent="login" class="w-100 h-100">
+      <v-card variant="text" class="mx-auto pt-2" color="surface-variant" max-width="448">
+        <v-card-title class="text-h4 px-8 py-4">Login</v-card-title>
+        <v-card-text class="px-8">
+          <div class="text-h6 text-medium-emphasis d-flex align-center justify-space-between">Password</div>
+          <v-text-field
+            v-model="formData.password"
+            :rules="[rules.required]"
+            :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+            :type="visible ? 'text' : 'password'"
+            density="compact"
+            placeholder="Enter your password"
+            prepend-inner-icon="mdi-lock-outline"
+            variant="outlined"
+            @click:append-inner="visible = !visible"
+          ></v-text-field>
+        </v-card-text>
+        <v-card-actions class="px-8 pb-8">
+          <v-btn type="submit" color="deep-purple-lighten-3" size="large" variant="tonal" block>Login</v-btn>
+        </v-card-actions>
       </v-card>
     </v-form>
-  </v-container>
+  </v-layout>
 </template>

@@ -14,3 +14,11 @@ import TheFooter from "@/components/TheFooter.vue";
     <TheFooter />
   </v-layout>
 </template>
+
+<style scoped>
+@media (min-width: 1280px) {
+  .v-main {
+    padding-bottom: 0;
+  }
+}
+</style>

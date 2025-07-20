@@ -72,9 +72,9 @@ router.beforeEach((to, from, next) => {
       isLogin.value = false;
       next({ name: "Login" });
     }
+  } else {
+    next();
   }
-
-  next();
 });
 
 router.afterEach(() => {
