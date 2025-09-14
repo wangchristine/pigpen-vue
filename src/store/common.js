@@ -20,8 +20,8 @@ export const useCommonStore = defineStore("common", () => {
     },
   );
 
-  const login = (data) => {
-    return apiPostLogin(data).then((res) => {
+  const login = async (data) => {
+    return await apiPostLogin(data).then((res) => {
       isLogin.value = true;
       Cookies.set("token", res.data.token, { expires: 1 / 24 });
 

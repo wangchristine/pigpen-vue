@@ -1,6 +1,8 @@
 <script setup>
 import { ref, nextTick } from "vue";
+import { useLotteryStore } from "@/store/lottery";
 
+const lotteryStore = useLotteryStore();
 const chatBlockRef = ref(null);
 const currentMessage = ref("");
 const messages = ref([
@@ -11,6 +13,12 @@ const messages = ref([
 const sendMessage = () => {
   if (currentMessage.value) {
     messages.value.push({ text: currentMessage.value, isMe: true });
+    lotteryStore.askAI({ prompt: currentMessage.value }).then((res) => {
+      messages.value.push({
+        text: JSON.stringify(res) + "\n已分析文字並帶入表單區，請前往確認內容唷^^",
+        isMe: false,
+      });
+    });
     currentMessage.value = "";
 
     nextTick(() => {

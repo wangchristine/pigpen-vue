@@ -1,27 +1,17 @@
 <script setup>
+import { storeToRefs } from "pinia";
 import { ref, watch } from "vue";
 import location from "@/config/location";
 import { useLotteryStore } from "@/store/lottery";
 import rules from "@/utils/formRule";
 
-const initData = {
-  title: "",
-  link: "",
-  startDate: null,
-  endDate: null,
-  award: "",
-  description: "",
-  announceDates: [],
-  announceLocations: [],
-};
-
 const lotteryStore = useLotteryStore();
 const formValid = ref(false);
 const fromNow = ref([false]);
-const formData = ref([{ ...initData }]);
+const { initData, formData } = storeToRefs(lotteryStore);
 
 const addFormItem = () => {
-  formData.value.push({ ...initData });
+  formData.value.push({ ...initData.value });
   fromNow.value.push(false);
 };
 

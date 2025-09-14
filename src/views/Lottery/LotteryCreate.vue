@@ -13,8 +13,8 @@ const tab = ref(null);
   <v-container class="py-0 px-0" height="100%" fluid>
     <v-card height="100%">
       <v-tabs v-model="tab" align-tabs="center" color="deep-purple-lighten-3" fixed-tabs>
-        <v-tab value="chat">Chat</v-tab>
-        <v-tab value="form">Form</v-tab>
+        <v-tab value="chat">AI 分析助手</v-tab>
+        <v-tab value="form">表單區</v-tab>
       </v-tabs>
 
       <v-card-text>

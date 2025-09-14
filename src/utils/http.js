@@ -11,8 +11,8 @@ const client = axios.create({
 
 client.interceptors.request.use(
   function (config) {
-    if (Cookies.get("auth") !== undefined && JSON.parse(Cookies.get("auth")).token) {
-      config.headers.common["Authorization"] = "Bearer " + JSON.parse(Cookies.get("auth")).token;
+    if (Cookies.get("token") !== undefined && Cookies.get("token")) {
+      config.headers["Authorization"] = "Bearer " + Cookies.get("token");
     }
     return config;
   },
