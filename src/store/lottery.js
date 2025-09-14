@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { apiPostAsk } from "@/apis";
 
 export const useLotteryStore = defineStore("lottery", () => {
+  const lotteryList = ref([]);
   const initData = ref({
     title: "",
     link: "",
