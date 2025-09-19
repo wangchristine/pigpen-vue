@@ -11,23 +11,24 @@ const tab = ref(null);
     <v-app-bar-title>Lottery Create</v-app-bar-title>
   </v-app-bar>
   <v-container class="py-0 px-0" height="100%" fluid>
-    <v-card height="100%">
-      <v-tabs v-model="tab" align-tabs="center" color="deep-purple-lighten-3" fixed-tabs>
-        <v-tab value="chat">AI 分析助手</v-tab>
-        <v-tab value="form">表單區</v-tab>
-      </v-tabs>
-
-      <v-card-text>
-        <v-carousel v-model="tab" :show-arrows="false" :continuous="false" hide-delimiters style="height: 100%">
-          <v-carousel-item value="chat">
-            <LotteryChat />
-          </v-carousel-item>
-          <v-carousel-item value="form">
-            <LotteryForm />
-          </v-carousel-item>
-        </v-carousel>
-      </v-card-text>
-    </v-card>
+    <v-tabs v-model="tab" align-tabs="center" color="deep-purple-lighten-3" height="56" fixed-tabs>
+      <v-tab value="chat">AI 分析助手</v-tab>
+      <v-tab value="form">表單區</v-tab>
+    </v-tabs>
+    <v-carousel
+      v-model="tab"
+      :show-arrows="false"
+      :continuous="false"
+      hide-delimiters
+      style="height: 100%; border-top: solid #b39ddb 0.5px"
+    >
+      <v-carousel-item value="chat">
+        <LotteryChat />
+      </v-carousel-item>
+      <v-carousel-item value="form">
+        <LotteryForm />
+      </v-carousel-item>
+    </v-carousel>
   </v-container>
 </template>
 
