@@ -95,7 +95,7 @@ const addLottery = () => {
                     label="開始日期*"
                     prepend-icon=""
                     prepend-inner-icon="$calendar"
-                    :rules="[rules.required]"
+                    :rules="[rules.required, rules.beforeDate(formData[key].endDate)]"
                   ></v-date-input>
                 </v-col>
                 <v-col cols="12" sm="6" md="4">
@@ -104,7 +104,7 @@ const addLottery = () => {
                     label="結束日期*"
                     prepend-icon=""
                     prepend-inner-icon="$calendar"
-                    :rules="[rules.required]"
+                    :rules="[rules.required, rules.afterDate(formData[key].startDate)]"
                   ></v-date-input>
                 </v-col>
               </v-row>

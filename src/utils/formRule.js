@@ -15,6 +15,20 @@ const rules = ref({
     }
     return "Required";
   },
+  beforeDate: (compareDate) => (date) => {
+    if (!compareDate) return true;
+    if (date > compareDate) {
+      return "須小於日期";
+    }
+    return true;
+  },
+  afterDate: (compareDate) => (date) => {
+    if (!compareDate) return true;
+    if (date < compareDate) {
+      return "須大於日期";
+    }
+    return true;
+  },
 });
 
 export default rules;
