@@ -2,12 +2,15 @@
 import { storeToRefs } from "pinia";
 import { ref, watch } from "vue";
 import location from "@/config/location";
+import router from "@/router";
 import { useCommonStore } from "@/store/common";
 import { useLotteryStore } from "@/store/lottery";
 import rules from "@/utils/formRule";
 
+const props = defineProps({ isEditMode: Boolean });
 const commonStore = useCommonStore();
 const lotteryStore = useLotteryStore();
+const formRef = ref(null);
 const formValid = ref(false);
 const fromNow = ref([false]);
 
@@ -37,25 +40,34 @@ watch(
   { deep: true },
 );
 
-const addLottery = () => {
+const submitForm = () => {
   if (formValid.value) {
     console.log(formData.value);
 
-    lotteryStore.addLottery(formData.value);
-    showSnack.value = true;
-    snackType.value = "success";
-    snackText.value = "成功新增";
+    if (props.isEditMode) {
+      lotteryStore.editLottery(formData.value);
+      showSnack.value = true;
+      snackType.value = "success";
+      snackText.value = "修改成功";
+    } else {
+      lotteryStore.addLottery(formData.value);
+      showSnack.value = true;
+      snackType.value = "success";
+      snackText.value = "新增成功";
+    }
+
+    router.push({ name: "Lottery" });
   }
 };
 </script>
 
 <template>
   <div class="form-container">
-    <v-form v-model="formValid" @submit.prevent="addLottery">
+    <v-form ref="formRef" v-model="formValid" @submit.prevent="submitForm">
       <v-row v-for="(item, key) in formData" :key="key" class="mb-2">
         <v-col cols="12">
           <v-card>
-            <v-card-title>
+            <v-card-title v-if="!props.isEditMode">
               task {{ key + 1 }}
               <v-btn
                 v-if="formData.length > 1"
@@ -138,6 +150,7 @@ const addLottery = () => {
                     prepend-icon=""
                     prepend-inner-icon="$calendar"
                     :rules="[rules.required]"
+                    @update:model-value="(dates) => (formData[key].announceDates = [...dates].sort((a, b) => a - b))"
                     multiple
                   ></v-date-input>
                   <ul class="announceDateList">
@@ -161,7 +174,7 @@ const addLottery = () => {
         </v-col>
       </v-row>
 
-      <v-btn variant="tonal" size="large" color="deep-purple-lighten-3" @click="addFormItem">
+      <v-btn v-if="!props.isEditMode" variant="tonal" size="large" color="deep-purple-lighten-3" @click="addFormItem">
         <v-icon>mdi-plus</v-icon>ADD
       </v-btn>
       <hr color="#b39ddb" />

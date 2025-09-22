@@ -6,7 +6,7 @@ import { useCommonStore } from "@/store/common";
 import AboutView from "@/views/AboutView.vue";
 import HomeView from "@/views/HomeView.vue";
 import LoginView from "@/views/LoginView.vue";
-import LotteryCreate from "@/views/Lottery/LotteryCreate.vue";
+import LotteryCreateEdit from "@/views/Lottery/LotteryCreateEdit.vue";
 import LotteryIndex from "@/views/Lottery/LotteryIndex.vue";
 
 const routes = [
@@ -33,7 +33,12 @@ const routes = [
           {
             path: "create",
             name: "LotteryCreate",
-            component: LotteryCreate,
+            component: LotteryCreateEdit,
+          },
+          {
+            path: "edit/:id",
+            name: "LotteryEdit",
+            component: LotteryCreateEdit,
           },
         ],
       },

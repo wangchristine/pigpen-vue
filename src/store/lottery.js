@@ -17,14 +17,36 @@ export const useLotteryStore = defineStore("lottery", () => {
   const formData = ref([{ ...initData.value }]);
 
   const addLottery = (data) => {
-    data.forEach((lottery) => {
-      lottery.status = [];
-      lottery.announceDates.forEach(() => {
-        lottery.status.push(0);
-      });
-      lottery.createdAt = new Date();
+    data.forEach((item) => {
+      const lottery = {
+        id: lotteryList.value.length + 1,
+        ...item,
+        status: item.announceDates.map(() => 0),
+        createdAt: new Date(),
+      };
       lotteryList.value.push(lottery);
     });
+  };
+
+  const editLottery = (data) => {
+    let lottery = lotteryList.value.filter((lottery) => lottery.id == data[0].id);
+
+    if (lottery?.id) {
+      lotteryList.value[lottery.id] = {
+        ...data[0],
+        id: lottery.id,
+        status: lottery.status,
+        createdAt: lottery.createdAt,
+      };
+    }
+  };
+
+  const deleteLottery = (id) => {
+    let index = lotteryList.value.findIndex((lottery) => lottery.id == id);
+
+    if (index != -1) {
+      lotteryList.value.splice(index, 1);
+    }
   };
 
   const askAI = async (data) => {
@@ -51,6 +73,8 @@ export const useLotteryStore = defineStore("lottery", () => {
     formData,
 
     addLottery,
+    editLottery,
+    deleteLottery,
     askAI,
   };
 });
