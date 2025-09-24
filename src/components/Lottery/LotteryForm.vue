@@ -1,6 +1,8 @@
 <script setup>
 import { storeToRefs } from "pinia";
 import { ref, watch } from "vue";
+import { onMounted } from "vue";
+import { nextTick } from "vue";
 import location from "@/config/location";
 import router from "@/router";
 import { useCommonStore } from "@/store/common";
@@ -59,6 +61,12 @@ const submitForm = () => {
     router.push({ name: "Lottery" });
   }
 };
+
+onMounted(() => {
+  nextTick(() => {
+    formRef.value.resetValidation();
+  });
+});
 </script>
 
 <template>
