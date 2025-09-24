@@ -33,7 +33,7 @@ const logout = async () => {
         <div>Welcome!</div>
       </div>
       <div class="d-flex justify-end">
-        <v-btn variant="tonal" @click="logout">logout</v-btn>
+        <v-btn color="deep-purple-lighten-3" variant="tonal" @click="logout">logout</v-btn>
       </div>
     </v-sheet>
 

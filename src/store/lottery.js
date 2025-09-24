@@ -49,6 +49,18 @@ export const useLotteryStore = defineStore("lottery", () => {
     }
   };
 
+  const updateLotteryStatus = (id, statusKey, status) => {
+    let lotteryIndex = lotteryList.value.findIndex((lottery) => lottery.id == id);
+
+    if (lotteryIndex != -1) {
+      let statusIndex = lotteryList.value[lotteryIndex].status.findIndex((status, key) => key == statusKey);
+
+      if (statusIndex != -1) {
+        lotteryList.value[lotteryIndex].status[statusIndex] = status;
+      }
+    }
+  };
+
   const askAI = async (data) => {
     return await apiPostAsk(data).then((res) => {
       formData.value = [
@@ -75,6 +87,7 @@ export const useLotteryStore = defineStore("lottery", () => {
     addLottery,
     editLottery,
     deleteLottery,
+    updateLotteryStatus,
     askAI,
   };
 });
