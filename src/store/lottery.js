@@ -67,12 +67,12 @@ export const useLotteryStore = defineStore("lottery", () => {
         {
           title: res.data.response.title,
           link: "",
-          startDate: null,
-          endDate: null,
-          award: "",
+          startDate: res.data.response.startDate,
+          endDate: res.data.response.endDate,
+          award: res.data.response.award,
           description: res.data.response.description,
-          announceDates: [],
-          announceLocations: [],
+          announceDates: res.data.response.announceDates,
+          announceLocations: res.data.response.announceLocations,
         },
       ];
       return res.data.response;
