@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { apiPostAsk } from "@/apis";
+import { apiGetLotteries, apiPostAsk } from "@/apis";
+import { parseDate } from "@/utils/date";
 
 export const useLotteryStore = defineStore("lottery", () => {
   const lotteryList = ref([]);
@@ -15,6 +16,18 @@ export const useLotteryStore = defineStore("lottery", () => {
     announceLocations: [],
   });
   const formData = ref([{ ...initData.value }]);
+
+  const getLotteries = async () => {
+    return await apiGetLotteries().then((res) => {
+      lotteryList.value = res.data.map((item) => ({
+        ...item,
+        startDate: parseDate(item.startDate),
+        endDate: parseDate(item.endDate),
+        announceDates: item.announceDates.map((date) => parseDate(date)),
+        createdAt: parseDate(item.createdAt),
+      }));
+    });
+  };
 
   const addLottery = (data) => {
     data.forEach((item) => {
@@ -84,6 +97,7 @@ export const useLotteryStore = defineStore("lottery", () => {
     initData,
     formData,
 
+    getLotteries,
     addLottery,
     editLottery,
     deleteLottery,

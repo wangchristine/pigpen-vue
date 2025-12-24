@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import LotteryStatusDialog from "@/components/Lottery/LotteryStatusDialog.vue";
 import router from "@/router";
 import { useLotteryStore } from "@/store/lottery";
+import { formatDate } from "@/utils/date";
 
 const lotteryStore = useLotteryStore();
 const { lotteryList } = storeToRefs(lotteryStore);
 const statusDialog = ref(false);
 const selectLotteryId = ref(null);
 const selectLotteryStatusKey = ref(null);
+
+onMounted(() => {
+  lotteryStore.getLotteries();
+});
 
 const inProcessLottery = computed(() =>
   lotteryList.value.filter((lottery) => lottery.status.some((status) => status == 0)),
@@ -70,13 +75,13 @@ const deleteLottery = (id) => {
                   <div class="text-content mb-2 mb-sm-0">
                     <div class="title">{{ lottery.title }}</div>
                     <div class="subtitle">
-                      {{ lottery.startDate.toLocaleDateString() }} ~ {{ lottery.endDate.toLocaleDateString() }} |
+                      {{ formatDate(lottery.startDate) }} ~ {{ formatDate(lottery.endDate) }} |
                       {{ lottery.award.slice(0, 100) }}
                       {{ lottery.award.length > 100 ? "......" : "" }}
                       <br />
                       公布日期:
                       <template v-for="(date, key2) in lottery.announceDates" :key="key2">
-                        {{ date.toLocaleDateString() }}
+                        {{ formatDate(date) }}
                         <template v-if="key2 !== lottery.announceDates.length - 1">, </template>
                       </template>
                     </div>
@@ -122,13 +127,13 @@ const deleteLottery = (id) => {
                   <div class="text-content">
                     <div class="title">{{ lottery.title }}</div>
                     <div class="subtitle">
-                      {{ lottery.startDate.toLocaleDateString() }} ~ {{ lottery.endDate.toLocaleDateString() }} |
+                      {{ formatDate(lottery.startDate) }} ~ {{ formatDate(lottery.endDate) }} |
                       {{ lottery.award.slice(0, 100) }}
                       {{ lottery.award.length > 100 ? "......" : "" }}
                       <br />
                       公布日期:
                       <template v-for="(date, key2) in lottery.announceDates" :key="key2">
-                        {{ date.toLocaleDateString() }}
+                        {{ formatDate(date) }}
                         <template v-if="key2 !== lottery.announceDates.length - 1">, </template>
                       </template>
                     </div>
