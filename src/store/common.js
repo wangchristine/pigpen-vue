@@ -20,6 +20,16 @@ export const useCommonStore = defineStore("common", () => {
     },
   );
 
+  const setLoading = (loading) => {
+    isProgressLoading.value = loading;
+  };
+
+  const apiErrorSnack = (error) => {
+    showSnack.value = true;
+    snackType.value = "error";
+    snackText.value = error.response?.data.message ?? "出錯啦! 請稍後再試";
+  };
+
   const login = async (data) => {
     return await apiPostLogin(data).then((res) => {
       isLogin.value = true;
@@ -46,6 +56,8 @@ export const useCommonStore = defineStore("common", () => {
     snackType,
     snackText,
 
+    setLoading,
+    apiErrorSnack,
     login,
     logout,
   };

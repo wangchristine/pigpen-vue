@@ -12,8 +12,8 @@ const statusDialog = ref(false);
 const selectLotteryId = ref(null);
 const selectLotteryStatusKey = ref(null);
 
-onMounted(() => {
-  lotteryStore.getLotteries();
+onMounted(async () => {
+  await lotteryStore.getLotteries();
 });
 
 const inProcessLottery = computed(() =>

@@ -1,5 +1,4 @@
 <script setup>
-import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import router from "@/router";
 import { useCommonStore } from "@/store/common";
@@ -10,7 +9,6 @@ const initData = {
   password: "",
 };
 const commonStore = useCommonStore();
-const { isProgressLoading, showSnack, snackType, snackText } = storeToRefs(commonStore);
 const formValid = ref(false);
 const formData = ref({ ...initData });
 
@@ -19,16 +17,8 @@ const login = async () => {
     return;
   }
 
-  try {
-    isProgressLoading.value = true;
-    await commonStore.login(formData.value);
-    router.push({ name: "Home" });
-  } catch (err) {
-    showSnack.value = true;
-    snackType.value = "error";
-    snackText.value = err.response?.data.message ?? "出錯啦! 請稍後再試";
-  }
-  isProgressLoading.value = false;
+  await commonStore.login(formData.value);
+  router.push({ name: "Home" });
 };
 </script>
 
