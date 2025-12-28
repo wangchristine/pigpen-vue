@@ -7,6 +7,7 @@ import location from "@/config/location";
 import router from "@/router";
 import { useCommonStore } from "@/store/common";
 import { useLotteryStore } from "@/store/lottery";
+import { formatDate } from "@/utils/date";
 import rules from "@/utils/formRule";
 
 const props = defineProps({ isEditMode: Boolean });
@@ -14,45 +15,31 @@ const commonStore = useCommonStore();
 const lotteryStore = useLotteryStore();
 const formRef = ref(null);
 const formValid = ref(false);
-const fromNow = ref([false]);
+const fromNow = ref(false);
 
 const { showSnack, snackType, snackText } = storeToRefs(commonStore);
-const { initData, formData } = storeToRefs(lotteryStore);
+const { formData } = storeToRefs(lotteryStore);
 
-const addFormItem = () => {
-  formData.value.push({ ...initData.value });
-  fromNow.value.push(false);
-};
+watch(fromNow, (isFromNow) => {
+  if (isFromNow) {
+    const now = new Date();
+    formData.value.startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  } else {
+    formData.value.startDate = null;
+  }
+});
 
-const removeFormItem = (key) => {
-  formData.value.splice(key, 1);
-  fromNow.value.splice(key, 1);
-};
-
-watch(
-  fromNow,
-  (data) => {
-    data.forEach((isFromNow, key) => {
-      if (isFromNow) {
-        const now = new Date();
-        formData.value[key].startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      }
-    });
-  },
-  { deep: true },
-);
-
-const submitForm = () => {
+const submitForm = async () => {
   if (formValid.value) {
     console.log(formData.value);
 
     if (props.isEditMode) {
-      lotteryStore.editLottery(formData.value);
+      await lotteryStore.editLottery(formData.value, formData.value.id);
       showSnack.value = true;
       snackType.value = "success";
       snackText.value = "修改成功";
     } else {
-      lotteryStore.addLottery(formData.value);
+      await lotteryStore.addLottery(formData.value);
       showSnack.value = true;
       snackType.value = "success";
       snackText.value = "新增成功";
@@ -72,66 +59,50 @@ onMounted(() => {
 <template>
   <div class="form-container">
     <v-form ref="formRef" v-model="formValid" @submit.prevent="submitForm">
-      <v-row v-for="(item, key) in formData" :key="key" class="mb-2">
+      <v-row>
         <v-col cols="12">
-          <v-card>
-            <v-card-title v-if="!props.isEditMode">
-              task {{ key + 1 }}
-              <v-btn
-                v-if="formData.length > 1"
-                class="float-right"
-                width="32"
-                height="32"
-                min-width="32"
-                variant="tonal"
-                color="deep-purple-lighten-3"
-                @click="removeFormItem(key)"
-              >
-                <v-icon>mdi-close</v-icon>
-              </v-btn>
-            </v-card-title>
-
+          <v-card class="pa-sm-3">
             <v-card-text>
               <v-row dense>
-                <v-col cols="12" md="8">
-                  <v-text-field v-model="formData[key].title" :rules="[rules.required]" label="Title*"></v-text-field>
+                <v-col cols="12">
+                  <v-text-field v-model="formData.title" :rules="[rules.required]" label="Title*"></v-text-field>
                 </v-col>
               </v-row>
               <v-row dense>
-                <v-col cols="12" md="8">
-                  <v-text-field v-model="formData[key].link" :rules="[rules.required]" label="Link*"></v-text-field>
+                <v-col cols="12">
+                  <v-text-field v-model="formData.link" :rules="[rules.required]" label="Link*"></v-text-field>
                 </v-col>
               </v-row>
               <v-row dense>
                 <v-col cols="auto" sm="12">活動區間: </v-col>
                 <v-col cols="12" md="2">
-                  <v-checkbox v-model="fromNow[key]">
+                  <v-checkbox v-model="fromNow">
                     <template #label>即日起</template>
                   </v-checkbox>
                 </v-col>
-                <v-col cols="12" sm="6" md="4" v-if="!fromNow[key]">
+                <v-col cols="12" sm="6" md="5">
                   <v-date-input
-                    v-model="formData[key].startDate"
+                    v-model="formData.startDate"
                     label="開始日期*"
                     prepend-icon=""
                     prepend-inner-icon="$calendar"
-                    :rules="[rules.required, rules.beforeDate(formData[key].endDate)]"
+                    :rules="[rules.required, rules.beforeDate(formData.endDate)]"
                   ></v-date-input>
                 </v-col>
-                <v-col cols="12" sm="6" md="4">
+                <v-col cols="12" sm="6" md="5">
                   <v-date-input
-                    v-model="formData[key].endDate"
+                    v-model="formData.endDate"
                     label="結束日期*"
                     prepend-icon=""
                     prepend-inner-icon="$calendar"
-                    :rules="[rules.required, rules.afterDate(formData[key].startDate)]"
+                    :rules="[rules.required, rules.afterDate(formData.startDate)]"
                   ></v-date-input>
                 </v-col>
               </v-row>
               <v-row dense>
-                <v-col cols="12" md="8">
+                <v-col cols="12">
                   <v-textarea
-                    v-model="formData[key].award"
+                    v-model="formData.award"
                     :rules="[rules.required]"
                     rows="3"
                     label="Award*"
@@ -140,9 +111,9 @@ onMounted(() => {
                 </v-col>
               </v-row>
               <v-row dense>
-                <v-col cols="12" md="8">
+                <v-col cols="12">
                   <v-textarea
-                    v-model="formData[key].description"
+                    v-model="formData.description"
                     :rules="[rules.required]"
                     rows="5"
                     label="Description*"
@@ -153,23 +124,21 @@ onMounted(() => {
               <v-row dense>
                 <v-col cols="12" sm="6" md="4">
                   <v-date-input
-                    v-model="formData[key].announceDates"
+                    v-model="formData.announceDates"
                     label="公布日期*"
                     prepend-icon=""
                     prepend-inner-icon="$calendar"
                     :rules="[rules.required]"
-                    @update:model-value="(dates) => (formData[key].announceDates = [...dates].sort((a, b) => a - b))"
+                    @update:model-value="(dates) => (formData.announceDates = [...dates].sort((a, b) => a - b))"
                     multiple
                   ></v-date-input>
                   <ul class="announceDateList">
-                    <li v-for="date in formData[key].announceDates" :key="date" :title="date">
-                      - {{ date.toLocaleDateString() }}
-                    </li>
+                    <li v-for="date in formData.announceDates" :key="date" :title="date">- {{ formatDate(date) }}</li>
                   </ul>
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-select
-                    v-model="formData[key].announceLocations"
+                    v-model="formData.announceLocations"
                     :items="location"
                     label="公布地點*"
                     multiple
@@ -181,16 +150,10 @@ onMounted(() => {
           </v-card>
         </v-col>
       </v-row>
-
-      <v-btn v-if="!props.isEditMode" variant="tonal" size="large" color="deep-purple-lighten-3" @click="addFormItem">
-        <v-icon>mdi-plus</v-icon>ADD
-      </v-btn>
       <hr color="#b39ddb" />
       <v-row>
         <v-col cols="12">
-          <v-btn type="submit" size="large" class="float-right" variant="tonal" color="deep-purple-lighten-3" block>
-            Save
-          </v-btn>
+          <v-btn type="submit" size="large" variant="tonal" color="deep-purple-lighten-3" block>儲存</v-btn>
         </v-col>
       </v-row>
     </v-form>

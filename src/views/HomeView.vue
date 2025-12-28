@@ -5,7 +5,7 @@ const cards = ref(["Today", "Yesterday"]);
 </script>
 
 <template>
-  <v-container class="py-8 px-6" fluid>
+  <v-container class="py-sm-8 px-sm-6" fluid>
     <v-row no-gutters>
       <v-col v-for="n in 3" :key="n">
         <v-card class="pa-2 ma-2" text="12"></v-card>

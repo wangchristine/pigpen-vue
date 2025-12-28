@@ -29,8 +29,9 @@ const openStatusDialog = (id, statusKey) => {
   selectLotteryStatusKey.value = statusKey;
 };
 
-const deleteLottery = (id) => {
-  lotteryStore.deleteLottery(id);
+const deleteLottery = async (id) => {
+  await lotteryStore.deleteLottery(id);
+  await lotteryStore.getLotteries();
 };
 </script>
 
@@ -45,11 +46,11 @@ const deleteLottery = (id) => {
         class="mr-2"
         @click="router.push({ name: 'LotteryCreate' })"
       >
-        Add
+        新增
       </v-btn>
     </template>
   </v-app-bar>
-  <v-container class="py-8 px-6" fluid>
+  <v-container class="py-sm-8 px-sm-6" fluid>
     <v-row>
       <v-col cols="12">
         <v-card>
@@ -75,7 +76,7 @@ const deleteLottery = (id) => {
                   <div class="text-content mb-2 mb-sm-0">
                     <div class="title">{{ lottery.title }}</div>
                     <div class="subtitle">
-                      {{ formatDate(lottery.startDate) }} ~ {{ formatDate(lottery.endDate) }} |
+                      活動日期: {{ formatDate(lottery.startDate) }} ~ {{ formatDate(lottery.endDate) }} |
                       {{ lottery.award.slice(0, 100) }}
                       {{ lottery.award.length > 100 ? "......" : "" }}
                       <br />
@@ -84,6 +85,8 @@ const deleteLottery = (id) => {
                         {{ formatDate(date) }}
                         <template v-if="key2 !== lottery.announceDates.length - 1">, </template>
                       </template>
+                      <br />
+                      建立日期: {{ formatDate(lottery.createdAt, "yyyy-MM-dd HH:mm:ss") }}
                     </div>
                   </div>
                   <div class="action-buttons d-flex gap-2">
@@ -127,7 +130,7 @@ const deleteLottery = (id) => {
                   <div class="text-content">
                     <div class="title">{{ lottery.title }}</div>
                     <div class="subtitle">
-                      {{ formatDate(lottery.startDate) }} ~ {{ formatDate(lottery.endDate) }} |
+                      活動日期: {{ formatDate(lottery.startDate) }} ~ {{ formatDate(lottery.endDate) }} |
                       {{ lottery.award.slice(0, 100) }}
                       {{ lottery.award.length > 100 ? "......" : "" }}
                       <br />
@@ -136,6 +139,8 @@ const deleteLottery = (id) => {
                         {{ formatDate(date) }}
                         <template v-if="key2 !== lottery.announceDates.length - 1">, </template>
                       </template>
+                      <br />
+                      建立日期: {{ formatDate(lottery.createdAt, "yyyy-MM-dd HH:mm:ss") }}
                     </div>
                   </div>
                 </div>

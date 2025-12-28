@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { apiGetLotteries, apiPostAsk } from "@/apis";
+import { apiDeleteLottery, apiGetLotteries, apiGetLottery, apiPostAsk, apiPostLottery, apiPutLottery } from "@/apis";
 import { parseDate } from "@/utils/date";
 
 export const useLotteryStore = defineStore("lottery", () => {
@@ -15,7 +15,7 @@ export const useLotteryStore = defineStore("lottery", () => {
     announceDates: [],
     announceLocations: [],
   });
-  const formData = ref([{ ...initData.value }]);
+  const formData = ref({ ...initData.value });
 
   const getLotteries = async () => {
     return await apiGetLotteries().then((res) => {
@@ -29,37 +29,20 @@ export const useLotteryStore = defineStore("lottery", () => {
     });
   };
 
-  const addLottery = (data) => {
-    data.forEach((item) => {
-      const lottery = {
-        id: lotteryList.value.length + 1,
-        ...item,
-        status: item.announceDates.map(() => 0),
-        createdAt: new Date(),
-      };
-      lotteryList.value.push(lottery);
-    });
+  const addLottery = async (data) => {
+    return await apiPostLottery(data);
   };
 
-  const editLottery = (data) => {
-    let lottery = lotteryList.value.filter((lottery) => lottery.id == data[0].id);
-
-    if (lottery?.id) {
-      lotteryList.value[lottery.id] = {
-        ...data[0],
-        id: lottery.id,
-        status: lottery.status,
-        createdAt: lottery.createdAt,
-      };
-    }
+  const getLottery = async (id) => {
+    return await apiGetLottery(id);
   };
 
-  const deleteLottery = (id) => {
-    let index = lotteryList.value.findIndex((lottery) => lottery.id == id);
+  const editLottery = async (data, id) => {
+    return await apiPutLottery(data, id);
+  };
 
-    if (index != -1) {
-      lotteryList.value.splice(index, 1);
-    }
+  const deleteLottery = async (id) => {
+    return await apiDeleteLottery(id);
   };
 
   const updateLotteryStatus = (id, statusKey, status) => {
@@ -76,18 +59,16 @@ export const useLotteryStore = defineStore("lottery", () => {
 
   const askAI = async (data) => {
     return await apiPostAsk(data).then((res) => {
-      formData.value = [
-        {
-          title: res.data.response.title,
-          link: "",
-          startDate: res.data.response.startDate,
-          endDate: res.data.response.endDate,
-          award: res.data.response.award,
-          description: res.data.response.description,
-          announceDates: res.data.response.announceDates,
-          announceLocations: res.data.response.announceLocations,
-        },
-      ];
+      formData.value = {
+        title: res.data.response.title,
+        link: "",
+        startDate: res.data.response.startDate,
+        endDate: res.data.response.endDate,
+        award: res.data.response.award,
+        description: res.data.response.description,
+        announceDates: res.data.response.announceDates,
+        announceLocations: res.data.response.announceLocations,
+      };
       return res.data.response;
     });
   };
@@ -99,6 +80,7 @@ export const useLotteryStore = defineStore("lottery", () => {
 
     getLotteries,
     addLottery,
+    getLottery,
     editLottery,
     deleteLottery,
     updateLotteryStatus,

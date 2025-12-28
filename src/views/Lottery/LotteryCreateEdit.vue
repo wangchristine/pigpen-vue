@@ -9,20 +9,24 @@ import { useLotteryStore } from "@/store/lottery";
 
 const route = useRoute();
 const lotteryStore = useLotteryStore();
-const { lotteryList, initData, formData } = storeToRefs(lotteryStore);
+const { initData, formData } = storeToRefs(lotteryStore);
 const tab = ref("form");
 const isEditMode = ref(null);
 
 onMounted(() => {
   if (route.params.id) {
     isEditMode.value = true;
-    formData.value = lotteryList.value.filter((lottery) => lottery.id == route.params.id);
-    if (!formData.value || formData.value.length == 0) {
-      router.push({ name: "Lottery" });
-    }
+    formData.value = lotteryStore
+      .getLottery(route.params.id)
+      .then((res) => {
+        formData.value = res.data;
+      })
+      .catch(() => {
+        router.push({ name: "Lottery" });
+      });
   } else {
     isEditMode.value = false;
-    formData.value = [{ ...initData.value }];
+    formData.value = { ...initData.value };
   }
 });
 </script>
