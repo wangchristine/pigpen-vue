@@ -29,13 +29,20 @@ const vuetify = createVuetify({
         colors: {
           background: "#282C34", // 主背景
           surface: "#21252B", // 卡片或表面顏色
-          primary: "#61AFEF", // 主色（例如按鈕等）
+          primary: "#B39DDB", // 主色（例如按鈕等）
           secondary: "#98C379", // 次色
           accent: "#C678DD", // 強調色
           error: "#E06C75", // 錯誤
           info: "#56B6C2", // 信息
           success: "#98C379", // 成功
           warning: "#D19A66", // 警告
+          "on-primary": "#1F1B24",
+          "on-secondary": "#1F1B24",
+          "on-accent": "#1F1B24",
+          "on-error": "#1F1B24",
+          "on-info": "#1F1B24",
+          "on-success": "#1F1B24",
+          "on-warning": "#1F1B24",
         },
       },
     },

@@ -14,9 +14,9 @@ const commonStore = useCommonStore();
 const { showSnack, snackType, snackText } = storeToRefs(commonStore);
 
 const colors = ref({
-  info: "deep-purple-lighten-4",
-  success: "green-lighten-2",
-  error: "red-lighten-2",
+  info: "info",
+  success: "success",
+  error: "error",
 });
 
 const toggleSnack = () => {

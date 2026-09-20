@@ -1,19 +1,28 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { computed, onMounted, ref } from "vue";
+import LotteryDeleteDialog from "@/components/Lottery/LotteryDeleteDialog.vue";
+import LotteryListItem from "@/components/Lottery/LotteryListItem.vue";
 import LotteryStatusDialog from "@/components/Lottery/LotteryStatusDialog.vue";
 import router from "@/router";
 import { useLotteryStore } from "@/store/lottery";
-import { formatDate } from "@/utils/date";
 
 const lotteryStore = useLotteryStore();
 const { lotteryList } = storeToRefs(lotteryStore);
 const statusDialog = ref(false);
 const selectLotteryId = ref(null);
 const selectLotteryStatusKey = ref(null);
+const deleteDialog = ref(false);
+const selectDeleteLotteryId = ref(null);
+const isLoading = ref(false);
 
 onMounted(async () => {
-  await lotteryStore.getLotteries();
+  isLoading.value = true;
+  try {
+    await lotteryStore.getLotteries();
+  } finally {
+    isLoading.value = false;
+  }
 });
 
 const inProcessLottery = computed(() =>
@@ -33,16 +42,25 @@ const deleteLottery = async (id) => {
   await lotteryStore.deleteLottery(id);
   await lotteryStore.getLotteries();
 };
+
+const confirmDeleteLottery = async (id) => {
+  selectDeleteLotteryId.value = id;
+  deleteDialog.value = true;
+};
+
+const deleteSelectedLottery = async () => {
+  await deleteLottery(selectDeleteLotteryId.value);
+};
 </script>
 
 <template>
-  <v-app-bar>
+  <v-app-bar color="surface" flat>
     <v-app-bar-title>Lottery</v-app-bar-title>
     <template #append>
       <v-btn
         prepend-icon="mdi-plus"
-        variant="tonal"
-        color="deep-purple-lighten-3"
+        variant="flat"
+        color="primary"
         class="mr-2"
         @click="router.push({ name: 'LotteryCreate' })"
       >
@@ -50,104 +68,59 @@ const deleteLottery = async (id) => {
       </v-btn>
     </template>
   </v-app-bar>
-  <v-container class="py-sm-8 px-sm-6" fluid>
-    <v-row>
+  <v-container class="index-container py-4 py-sm-8 px-4 px-sm-6" fluid>
+    <v-progress-linear v-if="isLoading" color="primary" indeterminate class="mb-4" />
+    <v-row v-else class="lottery-sections">
       <v-col cols="12">
-        <v-card>
-          <v-list>
-            <v-list-subheader title="進行中"></v-list-subheader>
-            <template v-for="(lottery, key1) in inProcessLottery" :key="key1">
-              <v-list-item class="flex-column align-start py-4">
-                <div class="status-row d-flex gap-2 mb-2">
-                  <template v-for="(status, key2) in lottery.status" :key="key2">
-                    <template v-if="status == 0">
-                      <v-avatar v-if="new Date() < lottery.announceDates[key2]" color="info">尚未</v-avatar>
-                      <v-btn v-else size="small" icon color="warning" class="rounded-circle" style="font-size: 16px">
-                        <v-avatar color="warning" @click="openStatusDialog(lottery.id, key2)">開獎</v-avatar>
-                      </v-btn>
-                    </template>
-                    <template v-else>
-                      <v-avatar v-if="status == 1" color="green accent-3">中獎</v-avatar>
-                      <v-avatar v-if="status == 2" color="error">未中</v-avatar>
-                    </template>
-                  </template>
-                </div>
-                <div class="text-row d-flex flex-column flex-sm-row justify-space-between align-center w-100">
-                  <div class="text-content mb-2 mb-sm-0">
-                    <div class="title">{{ lottery.title }}</div>
-                    <div class="subtitle">
-                      活動日期: {{ formatDate(lottery.startDate) }} ~ {{ formatDate(lottery.endDate) }} |
-                      {{ lottery.award.slice(0, 100) }}
-                      {{ lottery.award.length > 100 ? "......" : "" }}
-                      <br />
-                      公布日期:
-                      <template v-for="(date, key2) in lottery.announceDates" :key="key2">
-                        {{ formatDate(date) }}
-                        <template v-if="key2 !== lottery.announceDates.length - 1">, </template>
-                      </template>
-                      <br />
-                      建立日期: {{ formatDate(lottery.createdAt, "yyyy-MM-dd HH:mm:ss") }}
-                    </div>
-                  </div>
-                  <div class="action-buttons d-flex gap-2">
-                    <v-btn
-                      class="px-2 mr-1"
-                      variant="tonal"
-                      color="deep-purple-lighten-3"
-                      @click="router.push({ name: 'LotteryEdit', params: { id: lottery.id } })"
-                    >
-                      修改
-                    </v-btn>
-                    <v-btn
-                      class="px-2"
-                      variant="tonal"
-                      color="deep-purple-lighten-3"
-                      @click="deleteLottery(lottery.id)"
-                    >
-                      刪除
-                    </v-btn>
-                  </div>
-                </div>
-              </v-list-item>
-              <v-divider v-if="key1 !== inProcessLottery.length - 1" :key="`divider-${key1}`" inset></v-divider>
+        <v-card class="lottery-section" variant="outlined">
+          <v-card-title class="section-title d-flex align-center justify-space-between">
+            <span class="section-title-label">進行中</span>
+            <v-chip size="small" color="primary" variant="flat" rounded="pill">{{ inProcessLottery.length }}</v-chip>
+          </v-card-title>
+          <v-list v-if="inProcessLottery.length" class="py-0">
+            <template v-for="(lottery, key) in inProcessLottery" :key="lottery.id">
+              <LotteryListItem
+                :lottery="lottery"
+                is-in-process
+                @open-status="openStatusDialog"
+                @edit="router.push({ name: 'LotteryEdit', params: { id: $event } })"
+                @delete="confirmDeleteLottery"
+              />
+              <v-divider v-if="key !== inProcessLottery.length - 1" />
             </template>
           </v-list>
+          <div v-else class="empty-state">
+            <v-icon size="36" color="primary">mdi-ticket-confirmation-outline</v-icon>
+            <div class="text-body-1 mt-2">目前沒有進行中的抽獎活動</div>
+            <v-btn
+              prepend-icon="mdi-plus"
+              variant="flat"
+              color="primary"
+              class="mt-4"
+              @click="router.push({ name: 'LotteryCreate' })"
+            >
+              新增
+            </v-btn>
+          </div>
         </v-card>
       </v-col>
+
       <v-col cols="12">
-        <v-card>
-          <v-list>
-            <v-list-subheader title="歷史紀錄"></v-list-subheader>
-            <template v-for="(lottery, key1) in historyLottery" :key="key1">
-              <v-list-item class="flex-column align-start py-4">
-                <div class="status-row d-flex gap-2 mb-2">
-                  <template v-for="(status, key2) in lottery.status" :key="key2">
-                    <v-avatar v-if="status == 1" color="green accent-3">中獎</v-avatar>
-                    <v-avatar v-if="status == 2" color="error">未中</v-avatar>
-                  </template>
-                </div>
-                <div class="text-row d-flex justify-space-between align-center w-100">
-                  <div class="text-content">
-                    <div class="title">{{ lottery.title }}</div>
-                    <div class="subtitle">
-                      活動日期: {{ formatDate(lottery.startDate) }} ~ {{ formatDate(lottery.endDate) }} |
-                      {{ lottery.award.slice(0, 100) }}
-                      {{ lottery.award.length > 100 ? "......" : "" }}
-                      <br />
-                      公布日期:
-                      <template v-for="(date, key2) in lottery.announceDates" :key="key2">
-                        {{ formatDate(date) }}
-                        <template v-if="key2 !== lottery.announceDates.length - 1">, </template>
-                      </template>
-                      <br />
-                      建立日期: {{ formatDate(lottery.createdAt, "yyyy-MM-dd HH:mm:ss") }}
-                    </div>
-                  </div>
-                </div>
-              </v-list-item>
-              <v-divider v-if="key1 !== historyLottery.length - 1" :key="`divider-${key1}`" inset></v-divider>
+        <v-card class="lottery-section" variant="outlined">
+          <v-card-title class="section-title d-flex align-center justify-space-between">
+            <span class="section-title-label">歷史紀錄</span>
+            <v-chip size="small" color="primary" variant="flat" rounded="pill">{{ historyLottery.length }}</v-chip>
+          </v-card-title>
+          <v-list v-if="historyLottery.length" class="py-0">
+            <template v-for="(lottery, key) in historyLottery" :key="lottery.id">
+              <LotteryListItem :lottery="lottery" />
+              <v-divider v-if="key !== historyLottery.length - 1" />
             </template>
           </v-list>
+          <div v-else class="empty-state">
+            <v-icon size="36" color="primary">mdi-history</v-icon>
+            <div class="text-body-1 mt-2">目前沒有歷史紀錄</div>
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -158,19 +131,46 @@ const deleteLottery = async (id) => {
     :select-lottery-status-key="selectLotteryStatusKey"
     @update:open-dialog="statusDialog = $event"
   />
+  <LotteryDeleteDialog
+    :open-dialog="deleteDialog"
+    @update:open-dialog="deleteDialog = $event"
+    @confirm="deleteSelectedLottery"
+  />
 </template>
 
 <style scoped>
-.status-row {
-  flex-wrap: wrap;
+.index-container {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.title {
-  font-size: 16px;
+.lottery-section {
+  background-color: rgb(var(--v-theme-surface));
 }
 
-.subtitle {
-  font-size: 14px;
-  opacity: 0.7;
+.lottery-sections {
+  row-gap: 20px;
+}
+
+.section-title {
+  padding: 18px 20px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.section-title-label {
+  color: rgb(var(--v-theme-primary));
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  padding: 24px;
+  background-color: rgb(var(--v-theme-surface));
+  color: rgba(235, 235, 235, 0.68);
+  text-align: center;
 }
 </style>

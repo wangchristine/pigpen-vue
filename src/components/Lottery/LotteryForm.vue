@@ -61,22 +61,26 @@ onMounted(() => {
     <v-form ref="formRef" v-model="formValid" @submit.prevent="submitForm">
       <v-row>
         <v-col cols="12">
-          <v-card class="pa-sm-3">
-            <v-card-text>
+          <v-card class="form-card" variant="outlined">
+            <v-card-title class="form-section-title">基本資料</v-card-title>
+            <v-card-text class="pa-4 pa-sm-6">
               <v-row dense>
                 <v-col cols="12">
-                  <v-text-field v-model="formData.title" :rules="[rules.required]" label="Title*"></v-text-field>
+                  <v-text-field v-model="formData.title" :rules="[rules.required]" label="活動名稱*"></v-text-field>
                 </v-col>
-              </v-row>
-              <v-row dense>
                 <v-col cols="12">
-                  <v-text-field v-model="formData.link" :rules="[rules.required]" label="Link*"></v-text-field>
+                  <v-text-field v-model="formData.link" :rules="[rules.required]" label="活動連結*"></v-text-field>
                 </v-col>
               </v-row>
-              <v-row dense>
-                <v-col cols="auto" sm="12">活動區間: </v-col>
+            </v-card-text>
+
+            <v-divider />
+
+            <v-card-title class="form-section-title">活動期間</v-card-title>
+            <v-card-text class="pa-4 pa-sm-6 pt-0">
+              <v-row dense align="center">
                 <v-col cols="12" md="2">
-                  <v-checkbox v-model="fromNow">
+                  <v-checkbox v-model="fromNow" density="compact" hide-details>
                     <template #label>即日起</template>
                   </v-checkbox>
                 </v-col>
@@ -99,30 +103,44 @@ onMounted(() => {
                   ></v-date-input>
                 </v-col>
               </v-row>
+            </v-card-text>
+
+            <v-divider />
+
+            <v-card-title class="form-section-title">活動內容</v-card-title>
+            <v-card-text class="pa-4 pa-sm-6 pt-0">
               <v-row dense>
                 <v-col cols="12">
                   <v-textarea
                     v-model="formData.award"
                     :rules="[rules.required]"
                     rows="3"
-                    label="Award*"
+                    auto-grow
+                    max-rows="6"
+                    label="獎項內容*"
                     no-resize
                   ></v-textarea>
                 </v-col>
-              </v-row>
-              <v-row dense>
                 <v-col cols="12">
                   <v-textarea
                     v-model="formData.description"
                     :rules="[rules.required]"
                     rows="5"
-                    label="Description*"
+                    auto-grow
+                    max-rows="10"
+                    label="活動描述*"
                     no-resize
                   ></v-textarea>
                 </v-col>
               </v-row>
+            </v-card-text>
+
+            <v-divider />
+
+            <v-card-title class="form-section-title">公布設定</v-card-title>
+            <v-card-text class="pa-4 pa-sm-6 pt-0">
               <v-row dense>
-                <v-col cols="12" sm="6" md="4">
+                <v-col cols="12" sm="6">
                   <v-date-input
                     v-model="formData.announceDates"
                     label="公布日期*"
@@ -132,9 +150,19 @@ onMounted(() => {
                     @update:model-value="(dates) => (formData.announceDates = [...dates].sort((a, b) => a - b))"
                     multiple
                   ></v-date-input>
-                  <ul class="announceDateList">
-                    <li v-for="date in formData.announceDates" :key="date" :title="date">- {{ formatDate(date) }}</li>
-                  </ul>
+                  <div v-if="formData.announceDates.length" class="announce-date-list">
+                    <v-chip
+                      v-for="date in formData.announceDates"
+                      :key="date"
+                      size="small"
+                      variant="tonal"
+                      color="primary"
+                      rounded="pill"
+                    >
+                      {{ formatDate(date) }}
+                    </v-chip>
+                  </div>
+                  <div v-else class="text-caption text-medium-emphasis">尚未選擇公布日期</div>
                 </v-col>
                 <v-col cols="12" sm="6">
                   <v-select
@@ -150,26 +178,54 @@ onMounted(() => {
           </v-card>
         </v-col>
       </v-row>
-      <hr color="#b39ddb" />
-      <v-row>
-        <v-col cols="12">
-          <v-btn type="submit" size="large" variant="tonal" color="deep-purple-lighten-3" block>儲存</v-btn>
-        </v-col>
-      </v-row>
+      <v-divider class="my-2" />
+      <div class="submit-actions">
+        <v-btn type="submit" size="large" variant="flat" color="primary">儲存</v-btn>
+      </div>
     </v-form>
   </div>
 </template>
 
 <style scoped>
 .form-container {
-  max-width: 1200px;
+  max-width: 1040px;
   margin: 0 auto;
-  padding: 0 10px 10px 10px;
+  padding: 16px 16px 24px;
 }
 
-.announceDateList {
-  list-style: none;
-  padding: 0 10px 10px 10px;
-  font-size: 16px;
+.form-section-title {
+  padding: 20px 24px 12px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.announce-date-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.submit-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submit-actions .v-btn {
+  min-width: 160px;
+}
+
+@media (max-width: 599px) {
+  .form-container {
+    padding: 12px 8px 20px;
+  }
+
+  .form-section-title {
+    padding: 16px 16px 8px;
+  }
+
+  .submit-actions .v-btn {
+    width: 100%;
+  }
 }
 </style>

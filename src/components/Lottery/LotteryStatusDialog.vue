@@ -4,8 +4,14 @@ import { useLotteryStore } from "@/store/lottery";
 
 const props = defineProps({
   openDialog: Boolean,
-  selectLotteryId: Number,
-  selectLotteryStatusKey: Number,
+  selectLotteryId: {
+    type: Number,
+    default: null,
+  },
+  selectLotteryStatusKey: {
+    type: Number,
+    default: null,
+  },
 });
 const emit = defineEmits(["update:open-dialog"]);
 
@@ -33,10 +39,10 @@ const updateStatus = (status) => {
     <v-card>
       <v-card-text class="text-center">有中嗎？</v-card-text>
       <v-card-actions class="d-flex justify-center">
-        <v-btn icon size="large" color="green" variant="tonal" class="rounded-circle" @click="updateStatus(1)">
+        <v-btn icon size="large" color="success" variant="flat" class="rounded-circle" @click="updateStatus(1)">
           <v-icon>mdi-check</v-icon>
         </v-btn>
-        <v-btn icon size="large" color="red" variant="tonal" class="rounded-circle" @click="updateStatus(2)">
+        <v-btn icon size="large" color="error" variant="flat" class="rounded-circle" @click="updateStatus(2)">
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-card-actions>

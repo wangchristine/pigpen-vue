@@ -7,5 +7,5 @@ const { isProgressLoading } = storeToRefs(commonStore);
 </script>
 
 <template>
-  <v-progress-linear v-if="isProgressLoading" color="deep-purple-lighten-1" height="3" indeterminate absolute />
+  <v-progress-linear v-if="isProgressLoading" color="primary" height="3" indeterminate absolute />
 </template>

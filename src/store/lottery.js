@@ -17,13 +17,17 @@ export const useLotteryStore = defineStore("lottery", () => {
   });
   const formData = ref({ ...initData.value });
 
+  const normalizeLotteryFormData = (data) => ({
+    ...data,
+    startDate: parseDate(data.startDate),
+    endDate: parseDate(data.endDate),
+    announceDates: (data.announceDates ?? []).map((date) => parseDate(date)),
+  });
+
   const getLotteries = async () => {
     return await apiGetLotteries().then((res) => {
       lotteryList.value = res.data.map((item) => ({
-        ...item,
-        startDate: parseDate(item.startDate),
-        endDate: parseDate(item.endDate),
-        announceDates: item.announceDates.map((date) => parseDate(date)),
+        ...normalizeLotteryFormData(item),
         createdAt: parseDate(item.createdAt),
       }));
     });
@@ -34,7 +38,7 @@ export const useLotteryStore = defineStore("lottery", () => {
   };
 
   const getLottery = async (id) => {
-    return await apiGetLottery(id);
+    return await apiGetLottery(id).then((res) => ({ ...res, data: normalizeLotteryFormData(res.data) }));
   };
 
   const editLottery = async (data, id) => {
@@ -59,7 +63,7 @@ export const useLotteryStore = defineStore("lottery", () => {
 
   const askAI = async (data) => {
     return await apiPostAsk(data).then((res) => {
-      formData.value = {
+      formData.value = normalizeLotteryFormData({
         title: res.data.response.title,
         link: "",
         startDate: res.data.response.startDate,
@@ -68,7 +72,7 @@ export const useLotteryStore = defineStore("lottery", () => {
         description: res.data.response.description,
         announceDates: res.data.response.announceDates,
         announceLocations: res.data.response.announceLocations,
-      };
+      });
       return res.data.response;
     });
   };

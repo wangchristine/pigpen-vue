@@ -12,18 +12,20 @@ const lotteryStore = useLotteryStore();
 const { initData, formData } = storeToRefs(lotteryStore);
 const tab = ref("form");
 const isEditMode = ref(null);
+const isLoading = ref(false);
 
-onMounted(() => {
+onMounted(async () => {
   if (route.params.id) {
     isEditMode.value = true;
-    formData.value = lotteryStore
-      .getLottery(route.params.id)
-      .then((res) => {
-        formData.value = res.data;
-      })
-      .catch(() => {
-        router.push({ name: "Lottery" });
-      });
+    isLoading.value = true;
+    try {
+      const res = await lotteryStore.getLottery(route.params.id);
+      formData.value = res.data;
+    } catch {
+      router.push({ name: "Lottery" });
+    } finally {
+      isLoading.value = false;
+    }
   } else {
     isEditMode.value = false;
     formData.value = { ...initData.value };
@@ -32,29 +34,42 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-app-bar :height="56">
+  <v-app-bar color="surface" :height="56" flat>
     <v-app-bar-title>Lottery {{ isEditMode ? "Edit" : "Create" }}</v-app-bar-title>
   </v-app-bar>
-  <v-container class="py-0 px-0" height="100%" fluid>
-    <v-tabs v-model="tab" align-tabs="center" color="deep-purple-lighten-3" height="56" fixed-tabs>
-      <v-tab value="chat">AI 分析助手</v-tab>
-      <v-tab value="form">表單區</v-tab>
+  <v-container class="lottery-page py-0 px-0" fluid>
+    <v-tabs v-model="tab" color="primary" height="56" class="lottery-tabs">
+      <v-tab value="chat" class="lottery-tab">AI 分析助手</v-tab>
+      <v-tab value="form" class="lottery-tab">表單區</v-tab>
     </v-tabs>
-    <v-carousel
-      v-model="tab"
-      :show-arrows="false"
-      :continuous="false"
-      hide-delimiters
-      style="height: 100%; border-top: solid #b39ddb 0.5px"
-    >
-      <v-carousel-item value="chat">
+    <v-progress-linear v-if="isLoading" color="primary" indeterminate />
+    <v-window v-else v-model="tab" :show-arrows="false" :touch="true" class="lottery-window">
+      <v-window-item value="chat">
         <LotteryChat />
-      </v-carousel-item>
-      <v-carousel-item value="form">
+      </v-window-item>
+      <v-window-item value="form">
         <LotteryForm :is-edit-mode="isEditMode" />
-      </v-carousel-item>
-    </v-carousel>
+      </v-window-item>
+    </v-window>
   </v-container>
 </template>
 
-<style scoped></style>
+<style scoped>
+.lottery-window {
+  border-top: 1px solid rgb(var(--v-theme-primary));
+}
+
+.lottery-tabs {
+  width: 100%;
+}
+
+.lottery-tabs :deep(.v-slide-group__content) {
+  width: 100%;
+}
+
+.lottery-tabs :deep(.v-tab) {
+  flex: 1 1 0;
+  max-width: none;
+  min-width: 0;
+}
+</style>

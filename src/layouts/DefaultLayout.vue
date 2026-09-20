@@ -4,10 +4,10 @@ import TheFooter from "@/components/TheFooter.vue";
 </script>
 
 <template>
-  <v-layout>
+  <v-layout class="app-layout">
     <!-- if 電腦版顯示 -->
     <NavigationDrawer />
-    <v-main>
+    <v-main class="app-main">
       <router-view />
     </v-main>
     <!-- if 手機版顯示 -->
@@ -16,9 +16,13 @@ import TheFooter from "@/components/TheFooter.vue";
 </template>
 
 <style scoped>
-@media (min-width: 1280px) {
-  .v-main {
-    padding-bottom: 0;
+.app-main {
+  min-height: 100vh;
+}
+
+@media (max-width: 1279px) {
+  .app-main {
+    padding-bottom: 64px;
   }
 }
 </style>

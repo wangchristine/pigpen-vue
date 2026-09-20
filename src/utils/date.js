@@ -14,12 +14,13 @@ export const formatDate = (date, formatString = "yyyy-MM-dd") => {
 };
 
 /**
- * Parse ISO string to Date object
- * @param {string} dateString - ISO date string
+ * Parse an ISO string or return an existing Date object
+ * @param {Date|string} date - ISO date string or Date object
  * @returns {Date|null} Parsed date or null if invalid
  */
-export const parseDate = (dateString) => {
-  if (!dateString) return null;
+export const parseDate = (date) => {
+  if (!date) return null;
+  if (date instanceof Date) return date;
 
-  return parseISO(dateString);
+  return parseISO(date);
 };
